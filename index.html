@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>NSS Test 1 Revision</title>
+<style>
+/* Layout: one phone-first reading column, sticky topic chips, sections that read like a security standard's clauses */
+:root {
+  --bg: #F2F4F3;
+  --surface: #FFFFFF;
+  --ink: #15212A;
+  --muted: #56646E;
+  --line: #D3DBDE;
+  --accent: #1D5C88;
+  --accent-soft: #E3EDF5;
+  --trap: #A9500E;
+  --trap-soft: #FBEFE4;
+  --ok: #2B7A4B;
+  --ok-soft: #E4F3EA;
+  --bad: #B0281F;
+  --bad-soft: #FBE7E5;
+  --f-display: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
+  color-scheme: light;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1519; --surface: #172128; --ink: #E4EAEE; --muted: #97A5AE; --line: #2A3740;
+    --accent: #79B6E3; --accent-soft: #1A2D3B; --trap: #F0A764; --trap-soft: #33251A;
+    --ok: #74C795; --ok-soft: #17301F; --bad: #F2897E; --bad-soft: #3A1E1B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1519; --surface: #172128; --ink: #E4EAEE; --muted: #97A5AE; --line: #2A3740;
+  --accent: #79B6E3; --accent-soft: #1A2D3B; --trap: #F0A764; --trap-soft: #33251A;
+  --ok: #74C795; --ok-soft: #17301F; --bad: #F2897E; --bad-soft: #3A1E1B;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0; -webkit-text-size-adjust: 100%;
+  background: var(--bg); color: var(--ink);
+  font: 400 1rem/1.55 var(--f-body);
+  padding-inline: 16px; padding-block: 0 48px;
+}
+.wrap { max-width: 44rem; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: 2rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.1rem; }
+p { margin: 0; }
+.mono { font-family: var(--f-mono); }
+.label {
+  font: 600 0.72rem/1 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+strong { font-weight: 600; }
+
+/* Header */
+header { padding-block: 28px 18px; display: grid; gap: 10px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill {
+  font: 600 0.78rem/1 var(--f-mono); padding: 6px 9px; border-radius: 4px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+}
+.pill.warn { color: var(--trap); border-color: var(--trap); background: var(--trap-soft); }
+
+/* Sticky chips */
+nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--bg); padding-block: 10px; margin-inline: -16px; padding-inline: 16px;
+  border-bottom: 1px solid var(--line);
+}
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+nav ul::-webkit-scrollbar { display: none; }
+nav a {
+  display: block; white-space: nowrap; text-decoration: none;
+  font: 600 0.82rem/1 var(--f-body); color: var(--ink);
+  padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface);
+}
+nav a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+section { padding-block: 32px 4px; display: grid; gap: 14px; scroll-margin-top: 64px; }
+.sec-head { display: grid; gap: 4px; }
+.source { font: 400 0.8rem/1.4 var(--f-mono); color: var(--muted); }
+
+/* Traps */
+.traps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.traps li {
+  background: var(--trap-soft); border: 1px solid var(--trap); border-radius: 6px;
+  padding: 12px 14px; display: grid; gap: 4px;
+}
+.traps .label { color: var(--trap); }
+
+/* Tables */
+.table { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font: 600 0.72rem/1.2 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+td.key { font-weight: 600; white-space: nowrap; }
+.loss { color: var(--accent); font-weight: 600; }
+
+.callout {
+  background: var(--accent-soft); border-radius: 6px; padding: 12px 14px; display: grid; gap: 4px;
+}
+.callout .label { color: var(--accent); }
+
+/* FIPS scale */
+.scale { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.lvl { border-radius: 6px; padding: 12px 10px; display: grid; gap: 6px; align-content: start; border: 1px solid var(--line); background: var(--surface); min-width: 0; }
+.lvl .name { font: 700 1.15rem/1 var(--f-display); }
+.lvl .adj { font-style: italic; color: var(--muted); font-size: 0.9rem; }
+.lvl .life { font: 600 0.75rem/1.3 var(--f-mono); }
+.lvl.high { border-color: var(--bad); background: var(--bad-soft); }
+.lvl.high .life { color: var(--bad); }
+.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+.lvl.high .bar i { background: var(--bad); }
+
+/* Passive vs active */
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 10px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.panel ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 4px; }
+.defence { font: 600 0.85rem/1.3 var(--f-mono); padding: 8px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+
+/* X.800 flow */
+.flow { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); align-items: stretch; gap: 6px; }
+.node { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.node b { font-family: var(--f-display); font-size: 1rem; }
+.node span { font-size: 0.82rem; color: var(--muted); }
+.arrow { align-self: center; font: 600 1rem/1 var(--f-mono); color: var(--muted); }
+@media (max-width: 30rem) {
+  .flow { grid-template-columns: minmax(0,1fr); }
+  .arrow { justify-self: center; transform: rotate(90deg); }
+}
+
+/* DNS steps */
+.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 8px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 2rem minmax(0,1fr); gap: 10px; align-items: start; }
+.steps li::before {
+  content: counter(s); font: 600 0.9rem/2rem var(--f-mono); text-align: center;
+  width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid var(--line); background: var(--surface);
+}
+.steps li.dns::before { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+
+/* Quiz */
+.score { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.score output { font: 600 1rem/1 var(--f-mono); }
+.reset {
+  font: 600 0.85rem/1 var(--f-body); padding: 9px 14px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+.qs { display: grid; gap: 12px; }
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px; display: grid; gap: 10px; }
+.q-top { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; justify-content: space-between; }
+.missed { font: 600 0.7rem/1 var(--f-mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--trap); }
+.q p.stem { font-weight: 600; }
+.opts { display: grid; gap: 6px; }
+.opt {
+  text-align: left; font: 400 0.95rem/1.35 var(--f-body); color: var(--ink);
+  background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+  padding: 10px 12px; cursor: pointer; display: grid; grid-template-columns: 1.5rem minmax(0,1fr); gap: 6px;
+}
+.opt b { font-family: var(--f-mono); }
+.opt:disabled { cursor: default; }
+.opt.right { background: var(--ok-soft); border-color: var(--ok); }
+.opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+.why { font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+.why strong { color: var(--ink); }
+
+footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <span class="label">Network &amp; Systems Security · Week 1, part 1</span>
+  <h1>CIA, impact levels, attacks and the three standards</h1>
+  <div class="meta">
+    <span class="pill warn">Test 1 · Wed 14 Oct (unconfirmed)</span>
+    <span class="pill">20 MCQs · 5 options · 30 min</span>
+    <span class="pill">Studied 7 Oct · 7/12</span>
+  </div>
+</header>
+
+<nav aria-label="Topics">
+  <ul>
+    <li><a href="#traps">Traps</a></li>
+    <li><a href="#cia">CIA</a></li>
+    <li><a href="#fips">Impact levels</a></li>
+    <li><a href="#attacks">Attacks</a></li>
+    <li><a href="#standards">Standards</a></li>
+    <li><a href="#dns">DNS</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+</nav>
+
+<section id="traps">
+  <div class="sec-head">
+    <span class="label">Read first</span>
+    <h2>Your five traps</h2>
+    <p class="source">From today's wrong answers</p>
+  </div>
+  <ol class="traps">
+    <li><span class="label">Trap 1 · CIA wording</span><p><strong>Disclosure</strong> is a loss of confidentiality, not integrity. Integrity = <strong>modification or destruction</strong>.</p></li>
+    <li><span class="label">Trap 2 · FIPS 199 names</span><p>Only <strong>Low, Moderate, High</strong> are levels. "Limited" and "Serious" are adjectives inside the definitions.</p></li>
+    <li><span class="label">Trap 3 · Defence emphasis</span><p>Passive attacks → <strong>prevent</strong>. Detect and recover is for <strong>active</strong> attacks.</p></li>
+    <li><span class="label">Trap 4 · Publishers</span><p><strong>RFC → IETF</strong>, always. X.800 → ITU-T. FIPS 199 → NIST.</p></li>
+    <li><span class="label">Trap 5 · Threat vs attack</span><p>"Derives from an intelligent threat" is the <strong>attack</strong> definition. A threat is only the <strong>potential</strong>.</p></li>
+  </ol>
+</section>
+
+<section id="cia">
+  <div class="sec-head">
+    <span class="label">Slides 22–26 · from FIPS 199</span>
+    <h2>The CIA triad</h2>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Pillar</th><th>Means</th><th>Loss of it =</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Confidentiality</td><td>Authorised restrictions on access and disclosure, including privacy</td><td class="loss">unauthorised disclosure</td></tr>
+        <tr><td class="key">Integrity</td><td>Guarding against improper modification or destruction, including nonrepudiation and authenticity</td><td class="loss">unauthorised modification or destruction</td></tr>
+        <tr><td class="key">Availability</td><td>Timely and reliable access to and use of information</td><td class="loss">disruption of access or use</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <span class="label">Ask what the attacker did</span>
+    <p>They <strong>saw</strong> it → C. They <strong>changed or deleted</strong> it → I. They <strong>blocked</strong> it → A.<br>Lecturer's example: a hacker changes your blood type at the GP → <strong>C and I</strong>.</p>
+  </div>
+  <h3>High, moderate and low examples (slide 23)</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th></th><th>High</th><th>Moderate</th><th>Low</th></tr></thead>
+      <tbody>
+        <tr><td class="key">C</td><td>Student grades (FERPA)</td><td>Enrolment info</td><td>Directory info</td></tr>
+        <tr><td class="key">I</td><td>Patient allergy data</td><td>Registered-user forum</td><td>Anonymous poll</td></tr>
+        <tr><td class="key">A</td><td>Authentication service</td><td>University public website</td><td>Phone-directory lookup</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Two extra requirements (slide 26): <strong>authenticity</strong> (genuine, verifiable, from a trusted source) and <strong>accountability</strong> (actions traced uniquely to an entity, so records exist for forensics).</p>
+</section>
+
+<section id="fips">
+  <div class="sec-head">
+    <span class="label">Slide 27 · FIPS PUB 199</span>
+    <h2>Impact levels</h2>
+    <p>CIA says <em>what</em> was lost. FIPS 199 says <em>how bad</em> the loss is, rated separately for C, I and A.</p>
+  </div>
+  <div class="scale">
+    <div class="lvl"><span class="name">Low</span><div class="bar"><i style="width:33%"></i></div><span class="adj">limited</span><span>Minor damage, minor loss</span><span class="life">Loss of life: no</span></div>
+    <div class="lvl"><span class="name">Moderate</span><div class="bar"><i style="width:66%"></i></div><span class="adj">serious</span><span>Significant damage or harm</span><span class="life">Loss of life: no</span></div>
+    <div class="lvl high"><span class="name">High</span><div class="bar"><i style="width:100%"></i></div><span class="adj">severe or catastrophic</span><span>Can't perform primary functions</span><span class="life">Loss of life: yes</span></div>
+  </div>
+  <div class="callout">
+    <span class="label">Mnemonic</span>
+    <p><strong>L</strong>imited, <strong>S</strong>erious, <strong>S</strong>evere. Two S words, two different levels, and only the second one kills.</p>
+  </div>
+</section>
+
+<section id="attacks">
+  <div class="sec-head">
+    <span class="label">Slides 30–32</span>
+    <h2>Passive vs active attacks</h2>
+    <p>"Once you start changing things, you start to be an active attacker."</p>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <h3>Passive: learn, don't touch</h3>
+      <ul>
+        <li><strong>Release of message contents</strong>: reading the email, call or file</li>
+        <li><strong>Traffic analysis</strong>: contents encrypted, but who, how often and how long are still visible</li>
+      </ul>
+      <p>Very hard to detect, because nothing changes.</p>
+      <span class="defence">Defence: PREVENT (encryption)</span>
+    </div>
+    <div class="panel">
+      <h3>Active: alter or disrupt</h3>
+      <ul>
+        <li><strong>Masquerade</strong>: pretend to be someone else</li>
+        <li><strong>Replay</strong>: capture a valid message, resend it later</li>
+        <li><strong>Modification</strong>: alter, delay or reorder messages</li>
+        <li><strong>Denial of service</strong>: stop normal use</li>
+      </ul>
+      <p>Too hard to prevent outright.</p>
+      <span class="defence">Defence: DETECT + RECOVER</span>
+    </div>
+  </div>
+  <div class="callout">
+    <span class="label">Lecturer's DNS example</span>
+    <p>Listening to DNS queries = <strong>passive</strong>. Changing the returned IP to send the victim to a fake site = <strong>active</strong>.</p>
+  </div>
+</section>
+
+<section id="standards">
+  <div class="sec-head">
+    <span class="label">Slides 22, 27, 28–29, 40</span>
+    <h2>Three documents, three publishers</h2>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Document</th><th>One word</th><th>Publisher</th><th>Answers</th></tr></thead>
+      <tbody>
+        <tr><td class="key mono">FIPS 199</td><td>rating</td><td>NIST (US government)</td><td>What must we protect, and how bad is a loss?</td></tr>
+        <tr><td class="key mono">X.800</td><td>architecture</td><td>ITU-T (UN telecoms)</td><td>How do we structure security?</td></tr>
+        <tr><td class="key mono">RFC 4949</td><td>vocabulary</td><td>IETF (internet standards)</td><td>What does each word mean exactly?</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <span class="label">Lecturer, transcript 1:33</span>
+    <p>"X.800, it gives the architecture level of cybersecurity. The RFC gives the vocabulary of cybersecurity."</p>
+  </div>
+
+  <h3>X.800's three core concepts</h3>
+  <div class="flow" role="list">
+    <div class="node" role="listitem"><b>Attack</b><span>Any action that compromises an organisation's information security</span></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="node" role="listitem"><b>Service</b><span>Counters attacks. <strong>What</strong> you get, e.g. confidentiality</span></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="node" role="listitem"><b>Mechanism</b><span>Detects, prevents or recovers. <strong>How</strong> you get it, e.g. encryption</span></div>
+  </div>
+  <p>Encryption is a <strong>mechanism</strong>, so it is never one of the X.800 <em>services</em>.</p>
+
+  <h3>RFC 4949: threat vs attack</h3>
+  <div class="split">
+    <div class="panel"><span class="label">Threat</span><p>A <strong>potential</strong> for violation: a circumstance or capability that <em>could</em> cause harm.</p></div>
+    <div class="panel"><span class="label">Attack</span><p>An actual assault that derives from an <strong>intelligent threat</strong>: a <em>deliberate</em> attempt to evade security.</p></div>
+  </div>
+  <p>"Threat is the potential, attack is the action."</p>
+</section>
+
+<section id="dns">
+  <div class="sec-head">
+    <span class="label">Week 2 preview · L02 slides 14–19</span>
+    <h2>DNS: the internet's phone book</h2>
+    <p>You type <span class="mono">www.google.com</span>, but computers route by IP address. The <strong>Domain Name System</strong> turns the name into the number.</p>
+  </div>
+  <ol class="steps">
+    <li><p><strong>DHCP</strong> gives the laptop its IP, the first-hop router and the DNS server's address</p></li>
+    <li><p><strong>ARP</strong> finds the router's MAC address</p></li>
+    <li class="dns"><p><strong>DNS</strong>: the query goes in UDP → IP → Ethernet to the DNS server, which replies with Google's IP</p></li>
+    <li><p><strong>TCP</strong> handshake: SYN → SYNACK → ACK</p></li>
+    <li><p><strong>HTTP</strong> request for the page</p></li>
+  </ol>
+  <div class="split">
+    <div class="panel"><span class="label">Passive risk</span><p>Plain DNS isn't encrypted, so an eavesdropper sees every site you look up.</p></div>
+    <div class="panel"><span class="label">Active risk</span><p>Spoofing or poisoning the reply sends you to a fake site.</p></div>
+  </div>
+  <p class="source">Defences such as DNSSEC and DNS over HTTPS are background knowledge, not taught yet.</p>
+</section>
+
+<section id="quiz">
+  <div class="sec-head">
+    <span class="label">Tap an option to check it</span>
+    <h2>Quiz</h2>
+  </div>
+  <div class="score">
+    <output id="score" aria-live="polite">0 / 0 answered</output>
+    <button class="reset" id="reset" type="button">Start again</button>
+  </div>
+  <div class="qs" id="qs"></div>
+</section>
+
+<footer>
+  <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 lecture notes, FIPS 199 notes and my question bank). Quotes are from the module's lecture materials.</p>
+  <p>Part 2 (services, design principles, attack surface, attack trees) is next.</p>
+</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  { s: "Under FIPS 199, a loss of integrity is:", o: ["unauthorised disclosure of information","disruption of access to information","unauthorised modification or destruction of information","failure to trace actions to an entity","loss of personal privacy"], a: 2, m: true,
+    w: "A is confidentiality, B is availability, D is accountability." },
+  { s: "Student enrolment information (regulated by FERPA, seen by many staff daily) would typically have which confidentiality rating?", o: ["None","Low","Moderate","High","Critical"], a: 2,
+    w: "Grades are high, enrolment is moderate, directory info is low." },
+  { s: "Which FIPS 199 impact level involves potential loss of life?", o: ["Low","Limited","Moderate","High","Serious"], a: 3, m: true,
+    w: "Only Low, Moderate and High are levels. \"Serious\" describes Moderate, which explicitly excludes loss of life." },
+  { s: "All traffic on a link is strongly encrypted. Which passive attack can still succeed?", o: ["release of message contents","traffic analysis","masquerade","replay","none, because encryption prevents all passive attacks"], a: 1,
+    w: "Source, destination, frequency and length are still visible. C and D are active attacks." },
+  { s: "An attacker captures a valid authentication exchange and retransmits it later to gain access. This is:", o: ["traffic analysis","replay","release of message contents","denial of service","fault injection"], a: 1,
+    w: "Replay is active. Used to impersonate someone, it also becomes part of a masquerade." },
+  { s: "The main defensive emphasis for passive attacks is:", o: ["detection","recovery","prevention","deterrence","accountability"], a: 2, m: true,
+    w: "Passive attacks change nothing, so they are hard to detect and there is nothing to recover. Prevent them with encryption." },
+  { s: "\"X.800 provides a security ___; RFC 4949 provides a common security ___.\"", o: ["glossary; architecture","architecture; vocabulary","protocol; standard","framework; certification","mechanism; service"], a: 1,
+    w: "The lecturer's key idea from slide 40." },
+  { s: "RFC 4949 is published by:", o: ["ITU-T","NIST","NCSC","IETF","ISO"], a: 3, m: true,
+    w: "An RFC always comes from the IETF. X.800 is ITU-T, FIPS 199 is NIST." },
+  { s: "A security mechanism is designed to:", o: ["define security vocabulary","detect, prevent, or recover from a security attack","compromise information security","specify organisational policy","rate impact levels"], a: 1,
+    w: "Service = what you get. Mechanism = how you get it." },
+  { s: "According to RFC 4949, a threat is:", o: ["an assault on system security that derives from an intelligent threat","a potential for violation of security that could breach security and cause harm","a process designed to detect, prevent or recover from an attack","the reachable and exploitable vulnerabilities in a system","a deliberate attempt to evade security services"], a: 1, m: true,
+    w: "A and E describe an attack, C a mechanism, D the attack surface." },
+  { s: "Listening to DNS queries between a user and a DNS server is ___; altering the returned IP address is ___.", o: ["active; passive","passive; active","passive; passive","active; active","a threat; a vulnerability"], a: 1,
+    w: "Reading without changing is passive. Changing the reply is active." },
+  { s: "An attacker intercepts a bank transfer and changes the amount before it reaches the bank. This is primarily a loss of:", o: ["confidentiality","integrity","availability","accountability","privacy"], a: 1,
+    w: "Changing data is modification, which is an integrity loss." },
+  { s: "A breach causes significant financial loss and significant harm to individuals, but no loss of life. The FIPS 199 impact level is:", o: ["Low","Limited","Moderate","High","Serious"], a: 2,
+    w: "Significant harm without loss of life is Moderate." },
+  { s: "A hacker group has the skills and the motive to break into a council's network but hasn't done anything yet. In RFC 4949 terms this is:", o: ["an attack","a threat","a mechanism","a service","an intrusion"], a: 1,
+    w: "Nothing has happened yet, so it is still only a potential." }
+];
+const L = "ABCDE";
+const qs = document.getElementById("qs");
+const scoreEl = document.getElementById("score");
+let answered = 0, correct = 0;
+
+function updateScore() {
+  scoreEl.textContent = answered ? `${correct} / ${answered} correct · ${QUESTIONS.length - answered} left` : `${QUESTIONS.length} questions`;
+}
+
+function render() {
+  answered = 0; correct = 0;
+  qs.innerHTML = "";
+  QUESTIONS.forEach((q, i) => {
+    const card = document.createElement("article");
+    card.className = "q";
+    card.innerHTML = `<div class="q-top"><span class="label">Q${i + 1}</span>${q.m ? '<span class="missed">Missed on 7 Oct</span>' : ""}</div><p class="stem"></p><div class="opts"></div><p class="why" hidden></p>`;
+    card.querySelector(".stem").textContent = q.s;
+    const opts = card.querySelector(".opts");
+    q.o.forEach((text, j) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "opt";
+      b.innerHTML = `<b>${L[j]}</b><span></span>`;
+      b.querySelector("span").textContent = text;
+      b.addEventListener("click", () => choose(card, q, j));
+      opts.appendChild(b);
+    });
+    qs.appendChild(card);
+  });
+  updateScore();
+}
+
+function choose(card, q, j) {
+  const buttons = card.querySelectorAll(".opt");
+  buttons.forEach((b, k) => {
+    b.disabled = true;
+    if (k === q.a) b.classList.add("right");
+    else if (k === j) b.classList.add("wrong");
+  });
+  answered++; if (j === q.a) correct++;
+  const why = card.querySelector(".why");
+  why.innerHTML = `<strong>${j === q.a ? "Correct" : "Answer: " + L[q.a]}.</strong> `;
+  why.appendChild(document.createTextNode(q.w));
+  why.hidden = false;
+  updateScore();
+}
+
+document.getElementById("reset").addEventListener("click", render);
+render();
+</script>
+
+</body>
+</html>
