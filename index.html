@@ -184,12 +184,13 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <div class="wrap">
 <header>
-  <span class="label">Network &amp; Systems Security · Week 1, part 1</span>
-  <h1>CIA, impact levels, attacks and the three standards</h1>
+  <span class="label">Network &amp; Systems Security · Week 1, parts 1–2</span>
+  <h1>CIA, attacks, standards, services and design principles</h1>
   <div class="meta">
     <span class="pill warn">Test 1 · Wed 14 Oct (unconfirmed)</span>
     <span class="pill">20 MCQs · 5 options · 30 min</span>
-    <span class="pill">Studied 7 Oct · 7/12</span>
+    <span class="pill">Part 1 · 7 Oct · 7/12</span>
+    <span class="pill">Part 2 · 9 Oct · 19/27</span>
   </div>
 </header>
 
@@ -200,6 +201,8 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><a href="#fips">Impact levels</a></li>
     <li><a href="#attacks">Attacks</a></li>
     <li><a href="#standards">Standards</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#principles">Principles</a></li>
     <li><a href="#dns">DNS</a></li>
     <li><a href="#quiz">Quiz</a></li>
   </ul>
@@ -208,15 +211,21 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 <section id="traps">
   <div class="sec-head">
     <span class="label">Read first</span>
-    <h2>Your five traps</h2>
-    <p class="source">From today's wrong answers</p>
+    <h2>Your traps</h2>
+    <p class="source">From my wrong answers on 7 and 9 Oct</p>
   </div>
   <ol class="traps">
-    <li><span class="label">Trap 1 · CIA wording</span><p><strong>Disclosure</strong> is a loss of confidentiality, not integrity. Integrity = <strong>modification or destruction</strong>.</p></li>
-    <li><span class="label">Trap 2 · FIPS 199 names</span><p>Only <strong>Low, Moderate, High</strong> are levels. "Limited" and "Serious" are adjectives inside the definitions.</p></li>
-    <li><span class="label">Trap 3 · Defence emphasis</span><p>Passive attacks → <strong>prevent</strong>. Detect and recover is for <strong>active</strong> attacks.</p></li>
-    <li><span class="label">Trap 4 · Publishers</span><p><strong>RFC → IETF</strong>, always. X.800 → ITU-T. FIPS 199 → NIST.</p></li>
-    <li><span class="label">Trap 5 · Threat vs attack</span><p>"Derives from an intelligent threat" is the <strong>attack</strong> definition. A threat is only the <strong>potential</strong>.</p></li>
+    <li><span class="label">Trap 1 · CIA wording · 7 Oct</span><p><strong>Disclosure</strong> is a loss of confidentiality, not integrity. Integrity = <strong>modification or destruction</strong>.</p></li>
+    <li><span class="label">Trap 2 · FIPS 199 names · 7 Oct</span><p>Only <strong>Low, Moderate, High</strong> are levels. "Limited" and "Serious" are adjectives inside the definitions.</p></li>
+    <li><span class="label">Trap 3 · Defence emphasis · 7 + 9 Oct</span><p>Passive attacks → <strong>prevent</strong>. Detect and recover is for <strong>active</strong> attacks, so the integrity service is about <strong>detection</strong>. Passive changes nothing, so there is nothing to detect.</p></li>
+    <li><span class="label">Trap 4 · Publishers · 7 Oct</span><p><strong>RFC → IETF</strong>, always. X.800 → ITU-T. FIPS 199 → NIST.</p></li>
+    <li><span class="label">Trap 5 · Threat vs attack · 7 Oct</span><p>"Derives from an intelligent threat" is the <strong>attack</strong> definition. A threat is only the <strong>potential</strong>.</p></li>
+    <li><span class="label">Trap 6 · SEE vs CHANGE · 9 Oct</span><p>The attacker wants to <strong>see</strong> it (contents, or who talks to whom and how often) → <strong>confidentiality</strong>. They <strong>change</strong> it (modify, insert, reorder, replay) → <strong>integrity</strong>.</p></li>
+    <li><span class="label">Trap 7 · Replay · 9 Oct</span><p>Replay is <strong>active</strong>. Ask which step causes the harm: the <strong>resending</strong>. It works even on encrypted messages, so it's integrity, not confidentiality.</p></li>
+    <li><span class="label">Trap 8 · "Source" · 9 Oct</span><p>"The <strong>source</strong> of a single message, e.g. email" → <strong>data origin authentication</strong>, not access control.</p></li>
+    <li><span class="label">Trap 9 · Fail-safe vs complete mediation · 9 Oct</span><p>Default answer is NO ("block unless allowed") → <strong>fail-safe defaults</strong>. Check <strong>every time</strong> → complete mediation.</p></li>
+    <li><span class="label">Trap 10 · Open design · 9 Oct</span><p>Publish the <strong>algorithm</strong>, keep the <strong>key</strong> secret → <strong>open design</strong>.</p></li>
+    <li><span class="label">Trap 11 · Separation vs least privilege · 9 Oct</span><p>Is there a <strong>"two"</strong> (two keys, password <strong>and</strong> code)? → separation of privilege. About how far one person's access reaches → <strong>least privilege</strong>.</p></li>
   </ol>
 </section>
 
@@ -342,6 +351,98 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <p>"Threat is the potential, attack is the action."</p>
 </section>
 
+<section id="services">
+  <div class="sec-head">
+    <span class="label">Slides 24, 41–47 · X.800</span>
+    <h2>The five security services (+ availability)</h2>
+    <p>A service is the <strong>promise</strong> ("nobody can read this"). A mechanism is <strong>how</strong> the promise is kept (encryption).</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Service</th><th>The promise</th><th>Watch for</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Authentication</td><td>The party or message is who it claims to be</td><td><strong>Peer entity</strong>: both sides of a live connection (e.g. two TCP modules); stops masquerade and replay. <strong>Data origin</strong>: the source of <em>one</em> message, suits email, and does <em>not</em> stop duplication or modification</td></tr>
+        <tr><td class="key">Access control</td><td>Limits who can reach which hosts and applications</td><td>Needs authentication first, so rights can be tailored to each user</td></tr>
+        <tr><td class="key">Data confidentiality</td><td>Protects data from <strong>passive</strong> attacks: nobody can <strong>see</strong> it</td><td><strong>Traffic-flow confidentiality</strong> hides source, destination, frequency and length</td></tr>
+        <tr><td class="key">Data integrity</td><td>Received exactly as sent: nobody <strong>changed</strong> it</td><td><strong>Connection-oriented</strong> = the whole stream: no duplication, insertion, modification, reordering, replay or destruction (so it also helps against DoS). <strong>Connectionless</strong> = single messages, modification only. Active attacks → <strong>detect</strong>, not prevent</td></tr>
+        <tr><td class="key">Nonrepudiation</td><td>Neither side can deny the message</td><td><strong>Both directions</strong>: proof of who sent it, and proof that it was received</td></tr>
+        <tr><td class="key">Availability service</td><td>Keeps the system usable</td><td>Counters DoS. X.800 treats it as a property of the other services</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <span class="label">Campus picture</span>
+    <p>The card reader checking that the card is really yours = <strong>authentication</strong>. The list of rooms your card opens = <strong>access control</strong>. A signed, dated form that proves you handed in your coursework = <strong>nonrepudiation</strong>.</p>
+  </div>
+  <p>Encryption, digital signatures and the rest are <strong>mechanisms</strong>, never services.</p>
+</section>
+
+<section id="principles">
+  <div class="sec-head">
+    <span class="label">Slides 48–50 · 13 principles</span>
+    <h2>Security design principles</h2>
+    <p>1–8 are about <strong>who gets in and how much they can do</strong>. 9–13 are about <strong>how the system is built</strong>. The lecturer said "so 12", but slide 48 lists 13.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>Means</th><th>University building picture</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="key">Economy of mechanism</td><td>Keep it simple and small</td><td>One main entrance with one card reader, not 12 side doors</td></tr>
+        <tr><td>2</td><td class="key">Fail-safe defaults</td><td>Default = <strong>no</strong> access; grant by permission</td><td>Your card opens only rooms you've been added to; a new room stays locked</td></tr>
+        <tr><td>3</td><td class="key">Complete mediation</td><td>Check <strong>every</strong> access, every time</td><td>Tap your card at every door, not just the front gate</td></tr>
+        <tr><td>4</td><td class="key">Open design</td><td>Mechanism public, only the key secret</td><td>Everyone knows how card readers work; only your card is unique</td></tr>
+        <tr><td>5</td><td class="key">Separation of privilege</td><td><strong>Two or more</strong> conditions (e.g. MFA)</td><td>The exam-paper safe needs two staff with two keys</td></tr>
+        <tr><td>6</td><td class="key">Least privilege</td><td>Minimum rights for the job (RBAC)</td><td>The cleaner's card opens classrooms, not the exam office</td></tr>
+        <tr><td>7</td><td class="key">Least common mechanism</td><td>Share as little as possible <strong>between users</strong></td><td>Each student has their own locker, not one shared cupboard</td></tr>
+        <tr><td>8</td><td class="key">Psychological acceptability</td><td>Easy enough that people don't bypass it</td><td>10 minutes of checks to get in → people prop the doors open</td></tr>
+        <tr><td>9</td><td class="key">Isolation</td><td>Keep apart: (1) public vs critical, (2) users from each other, (3) the security tools themselves</td><td>Reception walled off from the exam office; separate lockers; the CCTV room locked</td></tr>
+        <tr><td>10</td><td class="key">Encapsulation</td><td>Isolation with <strong>designated entry points</strong> (object-oriented)</td><td>You get your transcript only at the student services counter, never inside the records room</td></tr>
+        <tr><td>11</td><td class="key">Modularity</td><td>Separate, protected, upgradeable security modules</td><td>One card system for every building, upgraded on its own</td></tr>
+        <tr><td>12</td><td class="key">Layering</td><td>Several overlapping protections = <strong>defence in depth</strong></td><td>Gate guard + ID card + locked office + CCTV; if one fails, the rest still stand</td></tr>
+        <tr><td>13</td><td class="key">Least astonishment</td><td>Behaves the way users expect</td><td>The "Fire exit" sign really leads outside</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <span class="label">Lecturer's examples</span>
+    <p>Isolation: Learn marks and official results sit in <strong>separate systems</strong>. Layering: logging in passes the browser, the authenticator and the password. Least privilege: students see their modules but can't edit marks.</p>
+  </div>
+  <h3>Trigger words</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th>The question says…</th><th>Answer</th></tr></thead>
+      <tbody>
+        <tr><td>simple, small</td><td class="key">Economy of mechanism</td></tr>
+        <tr><td>default, unless allowed, deny by default</td><td class="key">Fail-safe defaults</td></tr>
+        <tr><td>every access, each time, no caching</td><td class="key">Complete mediation</td></tr>
+        <tr><td>published algorithm, secret key, obscurity</td><td class="key">Open design</td></tr>
+        <tr><td>two, both, multi-factor</td><td class="key">Separation of privilege</td></tr>
+        <tr><td>only what's needed, minimum rights</td><td class="key">Least privilege</td></tr>
+        <tr><td>sharing between users</td><td class="key">Least common mechanism</td></tr>
+        <tr><td>users bypass it</td><td class="key">Psychological acceptability</td></tr>
+        <tr><td>kept separate, public vs critical</td><td class="key">Isolation</td></tr>
+        <tr><td>only through methods, interface, entry point</td><td class="key">Encapsulation</td></tr>
+        <tr><td>module, upgrade one part, reused by many</td><td class="key">Modularity</td></tr>
+        <tr><td>multiple, overlapping, if one fails</td><td class="key">Layering</td></tr>
+        <tr><td>surprise, expected, intuitive</td><td class="key">Least astonishment</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Look-alike pairs</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th>If the question says…</th><th>Answer</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td>one shared crypto library used by many protocols</td><td class="key">Modularity</td><td>Least common mechanism (users sharing)</td></tr>
+        <tr><td>password <strong>and</strong> code: one gate, two things</td><td class="key">Separation of privilege</td><td>Layering</td></tr>
+        <tr><td>several gates in a row, "if one fails…"</td><td class="key">Layering</td><td>Separation of privilege</td></tr>
+        <tr><td>reached only through methods or a counter</td><td class="key">Encapsulation</td><td>Isolation</td></tr>
+        <tr><td>block everything unless a rule allows it</td><td class="key">Fail-safe defaults</td><td>Complete mediation</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <section id="dns">
   <div class="sec-head">
     <span class="label">Week 2 preview · L02 slides 14–19</span>
@@ -376,31 +477,31 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <footer>
   <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 lecture notes, FIPS 199 notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Part 2 (services, design principles, attack surface, attack trees) is next.</p>
+  <p>Next: attack trees and attack surface (rest of week 1), then week 2.</p>
 </footer>
 </div>
 
 <script>
 const QUESTIONS = [
-  { s: "Under FIPS 199, a loss of integrity is:", o: ["unauthorised disclosure of information","disruption of access to information","unauthorised modification or destruction of information","failure to trace actions to an entity","loss of personal privacy"], a: 2, m: true,
+  { s: "Under FIPS 199, a loss of integrity is:", o: ["unauthorised disclosure of information","disruption of access to information","unauthorised modification or destruction of information","failure to trace actions to an entity","loss of personal privacy"], a: 2, m: "7 Oct",
     w: "A is confidentiality, B is availability, D is accountability." },
   { s: "Student enrolment information (regulated by FERPA, seen by many staff daily) would typically have which confidentiality rating?", o: ["None","Low","Moderate","High","Critical"], a: 2,
     w: "Grades are high, enrolment is moderate, directory info is low." },
-  { s: "Which FIPS 199 impact level involves potential loss of life?", o: ["Low","Limited","Moderate","High","Serious"], a: 3, m: true,
+  { s: "Which FIPS 199 impact level involves potential loss of life?", o: ["Low","Limited","Moderate","High","Serious"], a: 3, m: "7 Oct",
     w: "Only Low, Moderate and High are levels. \"Serious\" describes Moderate, which explicitly excludes loss of life." },
   { s: "All traffic on a link is strongly encrypted. Which passive attack can still succeed?", o: ["release of message contents","traffic analysis","masquerade","replay","none, because encryption prevents all passive attacks"], a: 1,
     w: "Source, destination, frequency and length are still visible. C and D are active attacks." },
   { s: "An attacker captures a valid authentication exchange and retransmits it later to gain access. This is:", o: ["traffic analysis","replay","release of message contents","denial of service","fault injection"], a: 1,
     w: "Replay is active. Used to impersonate someone, it also becomes part of a masquerade." },
-  { s: "The main defensive emphasis for passive attacks is:", o: ["detection","recovery","prevention","deterrence","accountability"], a: 2, m: true,
+  { s: "The main defensive emphasis for passive attacks is:", o: ["detection","recovery","prevention","deterrence","accountability"], a: 2, m: "7 Oct",
     w: "Passive attacks change nothing, so they are hard to detect and there is nothing to recover. Prevent them with encryption." },
   { s: "\"X.800 provides a security ___; RFC 4949 provides a common security ___.\"", o: ["glossary; architecture","architecture; vocabulary","protocol; standard","framework; certification","mechanism; service"], a: 1,
     w: "The lecturer's key idea from slide 40." },
-  { s: "RFC 4949 is published by:", o: ["ITU-T","NIST","NCSC","IETF","ISO"], a: 3, m: true,
+  { s: "RFC 4949 is published by:", o: ["ITU-T","NIST","NCSC","IETF","ISO"], a: 3, m: "7 Oct",
     w: "An RFC always comes from the IETF. X.800 is ITU-T, FIPS 199 is NIST." },
   { s: "A security mechanism is designed to:", o: ["define security vocabulary","detect, prevent, or recover from a security attack","compromise information security","specify organisational policy","rate impact levels"], a: 1,
     w: "Service = what you get. Mechanism = how you get it." },
-  { s: "According to RFC 4949, a threat is:", o: ["an assault on system security that derives from an intelligent threat","a potential for violation of security that could breach security and cause harm","a process designed to detect, prevent or recover from an attack","the reachable and exploitable vulnerabilities in a system","a deliberate attempt to evade security services"], a: 1, m: true,
+  { s: "According to RFC 4949, a threat is:", o: ["an assault on system security that derives from an intelligent threat","a potential for violation of security that could breach security and cause harm","a process designed to detect, prevent or recover from an attack","the reachable and exploitable vulnerabilities in a system","a deliberate attempt to evade security services"], a: 1, m: "7 Oct",
     w: "A and E describe an attack, C a mechanism, D the attack surface." },
   { s: "Listening to DNS queries between a user and a DNS server is ___; altering the returned IP address is ___.", o: ["active; passive","passive; active","passive; passive","active; active","a threat; a vulnerability"], a: 1,
     w: "Reading without changing is passive. Changing the reply is active." },
@@ -409,7 +510,43 @@ const QUESTIONS = [
   { s: "A breach causes significant financial loss and significant harm to individuals, but no loss of life. The FIPS 199 impact level is:", o: ["Low","Limited","Moderate","High","Serious"], a: 2,
     w: "Significant harm without loss of life is Moderate." },
   { s: "A hacker group has the skills and the motive to break into a council's network but hasn't done anything yet. In RFC 4949 terms this is:", o: ["an attack","a threat","a mechanism","a service","an intrusion"], a: 1,
-    w: "Nothing has happened yet, so it is still only a potential." }
+    w: "Nothing has happened yet, so it is still only a potential." },
+  { s: "Messages are encrypted, but an attacker can still see who talks to whom, how often and how long. Which X.800 service is meant to hide this?", o: ["connectionless integrity","traffic-flow confidentiality","data origin authentication","access control","nonrepudiation"], a: 1, m: "9 Oct",
+    w: "The attacker wants to SEE the pattern, so it's confidentiality, specifically traffic-flow confidentiality." },
+  { s: "Connection-oriented integrity protects a stream against all of these EXCEPT:", o: ["duplication","reordering","replay","modification","traffic analysis"], a: 4, m: "9 Oct",
+    w: "Traffic analysis is SEEING (a passive attack), so it belongs to confidentiality. A–D are all CHANGING the stream." },
+  { s: "A lecturer receives an email and wants assurance that it really came from the claimed sender. There was no earlier contact between them. Which service fits best?", o: ["access control","peer entity authentication","data origin authentication","connection-oriented integrity","availability service"], a: 2, m: "9 Oct",
+    w: "The trigger is the source of a single message, e.g. email. Peer entity authentication is for a live connection between two parties." },
+  { s: "An attacker records an encrypted login message and sends it again later to get in. Which service most directly counters this?", o: ["data confidentiality","traffic-flow confidentiality","connection-oriented data integrity","availability service","access control"], a: 2, m: "9 Oct",
+    w: "Replay is active: the harm is the resending, which works even though the message is encrypted. Confidentiality doesn't stop it." },
+  { s: "The X.800 data integrity service deals with active attacks. Its main emphasis is therefore:", o: ["prevention only","detection (with or without recovery)","deterrence","encryption","traffic padding"], a: 1, m: "9 Oct",
+    w: "Active attacks are too hard to prevent outright, so integrity is about detection, ideally with automated recovery." },
+  { s: "A supplier later claims it never received a customer's order. Which service gives the customer proof that it was received?", o: ["data origin authentication","access control","nonrepudiation","data confidentiality","availability service"], a: 2,
+    w: "Nonrepudiation works in both directions: proof of who sent it, and proof that it was received." },
+  { s: "Which of these is NOT one of the five X.800 security service categories?", o: ["authentication","access control","encryption","data integrity","nonrepudiation"], a: 2,
+    w: "Encryption is a mechanism (how), not a service (what)." },
+  { s: "A firewall blocks all traffic unless a rule explicitly allows it. Which principle is this?", o: ["complete mediation","fail-safe defaults","least privilege","economy of mechanism","layering"], a: 1, m: "9 Oct",
+    w: "The default answer is NO. Complete mediation is about checking every time, not about the default." },
+  { s: "Permissions are re-checked on every read of a file, not only when the file is first opened. Which principle is this?", o: ["fail-safe defaults","isolation","complete mediation","least common mechanism","open design"], a: 2,
+    w: "Every access, every time, with no trusting an earlier decision." },
+  { s: "A company uses a publicly published encryption algorithm and keeps only the keys secret. Which principle is this?", o: ["fail-safe defaults","open design","encapsulation","modularity","least astonishment"], a: 1, m: "9 Oct",
+    w: "Security must not depend on attackers not knowing the design. No security by obscurity." },
+  { s: "A cleaner's ID card opens classrooms and corridors but not the server room. Which principle is this?", o: ["separation of privilege","least privilege","isolation","complete mediation","least common mechanism"], a: 1, m: "9 Oct",
+    w: "No \"two\" in the question, just how far one person's access reaches, so it's least privilege." },
+  { s: "Staff must enter a password AND tap a smart card to open the exam system. Which principle is this?", o: ["least privilege","layering","separation of privilege","economy of mechanism","complete mediation"], a: 2,
+    w: "One gate needing two conditions is separation of privilege. Layering is several separate gates in a row." },
+  { s: "A university keeps its public website on a different server from the official results database, so a hacked website can't reach the results. Which principle is this?", o: ["least privilege","layering","isolation","encapsulation","open design"], a: 2,
+    w: "Public systems kept apart from critical ones: the first of isolation's three contexts." },
+  { s: "Logging in passes browser protections, then a password, then an authenticator app. If one fails, the others still protect you. Which principle is this?", o: ["separation of privilege","modularity","complete mediation","fail-safe defaults","layering"], a: 4,
+    w: "\"If one fails, the others still stand\" is defence in depth, i.e. layering." },
+  { s: "A student-record object keeps its grade private; other code can only use getGrade() and setGrade(). Which principle is this?", o: ["encapsulation","isolation","least common mechanism","economy of mechanism","psychological acceptability"], a: 0,
+    w: "Isolation with designated entry points, based on object-oriented design." },
+  { s: "Many protocols share one crypto library, which can be upgraded without redesigning the rest of the system. Which principle is this?", o: ["least common mechanism","layering","open design","modularity","least astonishment"], a: 3,
+    w: "The \"shared\" trap: least common mechanism is about USERS sharing. One reusable code module is modularity." },
+  { s: "A new entry check takes so long that staff start propping the side door open. Which principle was ignored?", o: ["psychological acceptability","economy of mechanism","complete mediation","fail-safe defaults","isolation"], a: 0,
+    w: "If security gets in the way of people's work, they bypass it." },
+  { s: "A button labelled \"Encrypt\" only hides the message preview; the message is still sent unencrypted. Which principle does this break most clearly?", o: ["open design","least astonishment","fail-safe defaults","isolation","economy of mechanism"], a: 1,
+    w: "The system doesn't behave the way the user expects." }
 ];
 const L = "ABCDE";
 const qs = document.getElementById("qs");
@@ -426,7 +563,7 @@ function render() {
   QUESTIONS.forEach((q, i) => {
     const card = document.createElement("article");
     card.className = "q";
-    card.innerHTML = `<div class="q-top"><span class="label">Q${i + 1}</span>${q.m ? '<span class="missed">Missed on 7 Oct</span>' : ""}</div><p class="stem"></p><div class="opts"></div><p class="why" hidden></p>`;
+    card.innerHTML = `<div class="q-top"><span class="label">Q${i + 1}</span>${q.m ? `<span class="missed">Missed on ${q.m}</span>` : ""}</div><p class="stem"></p><div class="opts"></div><p class="why" hidden></p>`;
     card.querySelector(".stem").textContent = q.s;
     const opts = card.querySelector(".opts");
     q.o.forEach((text, j) => {
