@@ -176,6 +176,20 @@ td.key { font-weight: 600; white-space: nowrap; }
 .why { font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
 .why strong { color: var(--ink); }
 
+/* Attack trees */
+.tree, .tree ul { list-style: none; margin: 0; padding: 0; }
+.tree { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 6px; }
+.tree ul { margin: 6px 0 0 0.45rem; padding-left: 0.9rem; border-left: 2px solid var(--line); display: grid; gap: 6px; }
+.tree li { font-size: 0.93rem; }
+.gate { font: 700 0.68rem/1 var(--f-mono); letter-spacing: 0.06em; padding: 3px 6px; border-radius: 4px; margin-left: 6px; vertical-align: 1px; }
+.gate.or { color: var(--accent); background: var(--accent-soft); }
+.gate.and { color: var(--trap); background: var(--trap-soft); }
+.root { font-weight: 700; }
+/* Surface x depth */
+td.low { color: var(--ok); font-weight: 600; }
+td.med { color: var(--trap); font-weight: 600; }
+td.high { color: var(--bad); font-weight: 600; }
+
 footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display: grid; gap: 6px; }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 </style>
@@ -184,13 +198,15 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <div class="wrap">
 <header>
-  <span class="label">Network &amp; Systems Security · Week 1, parts 1–2</span>
-  <h1>CIA, attacks, standards, services and design principles</h1>
+  <span class="label">Network &amp; Systems Security · Week 1 + start of week 2</span>
+  <h1>CIA, attacks, standards, services, principles, attack surface, attack trees and hashing</h1>
   <div class="meta">
     <span class="pill warn">Test 1 · Wed 14 Oct (unconfirmed)</span>
     <span class="pill">20 MCQs · 5 options · 30 min</span>
     <span class="pill">Part 1 · 7 Oct · 7/12</span>
     <span class="pill">Part 2 · 9 Oct · 19/27</span>
+    <span class="pill">Learn quiz · 10 Oct · 13/15</span>
+    <span class="pill">Weak spots · 11 Oct · 9/10</span>
   </div>
 </header>
 
@@ -203,7 +219,10 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><a href="#standards">Standards</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#principles">Principles</a></li>
+    <li><a href="#surface">Surface</a></li>
+    <li><a href="#trees">Trees</a></li>
     <li><a href="#dns">DNS</a></li>
+    <li><a href="#hashing">Hashing</a></li>
     <li><a href="#quiz">Quiz</a></li>
   </ul>
 </nav>
@@ -212,20 +231,25 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <div class="sec-head">
     <span class="label">Read first</span>
     <h2>Your traps</h2>
-    <p class="source">From my wrong answers on 7 and 9 Oct</p>
+    <p class="source">From my wrong answers, 7 to 11 Oct</p>
   </div>
   <ol class="traps">
     <li><span class="label">Trap 1 · CIA wording · 7 Oct</span><p><strong>Disclosure</strong> is a loss of confidentiality, not integrity. Integrity = <strong>modification or destruction</strong>.</p></li>
     <li><span class="label">Trap 2 · FIPS 199 names · 7 Oct</span><p>Only <strong>Low, Moderate, High</strong> are levels. "Limited" and "Serious" are adjectives inside the definitions.</p></li>
     <li><span class="label">Trap 3 · Defence emphasis · 7 + 9 Oct</span><p>Passive attacks → <strong>prevent</strong>. Detect and recover is for <strong>active</strong> attacks, so the integrity service is about <strong>detection</strong>. Passive changes nothing, so there is nothing to detect.</p></li>
-    <li><span class="label">Trap 4 · Publishers · 7 Oct</span><p><strong>RFC → IETF</strong>, always. X.800 → ITU-T. FIPS 199 → NIST.</p></li>
-    <li><span class="label">Trap 5 · Threat vs attack · 7 Oct</span><p>"Derives from an intelligent threat" is the <strong>attack</strong> definition. A threat is only the <strong>potential</strong>.</p></li>
+    <li><span class="label">Trap 4 · Publishers · missed 3× · right 2/2 on 11 Oct</span><p><strong>RFC → IETF</strong>, always. X.800 → ITU-T. FIPS 199 → NIST.</p></li>
+    <li><span class="label">Trap 5 · Threat vs attack · right 2/2 on 11 Oct</span><p>"Derives from an intelligent threat" is the <strong>attack</strong> definition. A threat is only the <strong>potential</strong>.</p></li>
     <li><span class="label">Trap 6 · SEE vs CHANGE · 9 Oct</span><p>The attacker wants to <strong>see</strong> it (contents, or who talks to whom and how often) → <strong>confidentiality</strong>. They <strong>change</strong> it (modify, insert, reorder, replay) → <strong>integrity</strong>.</p></li>
     <li><span class="label">Trap 7 · Replay · 9 Oct</span><p>Replay is <strong>active</strong>. Ask which step causes the harm: the <strong>resending</strong>. It works even on encrypted messages, so it's integrity, not confidentiality.</p></li>
     <li><span class="label">Trap 8 · "Source" · 9 Oct</span><p>"The <strong>source</strong> of a single message, e.g. email" → <strong>data origin authentication</strong>, not access control.</p></li>
     <li><span class="label">Trap 9 · Fail-safe vs complete mediation · 9 Oct</span><p>Default answer is NO ("block unless allowed") → <strong>fail-safe defaults</strong>. Check <strong>every time</strong> → complete mediation.</p></li>
     <li><span class="label">Trap 10 · Open design · 9 Oct</span><p>Publish the <strong>algorithm</strong>, keep the <strong>key</strong> secret → <strong>open design</strong>.</p></li>
     <li><span class="label">Trap 11 · Separation vs least privilege · 9 Oct</span><p>Is there a <strong>"two"</strong> (two keys, password <strong>and</strong> code)? → separation of privilege. About how far one person's access reaches → <strong>least privilege</strong>.</p></li>
+    <li><span class="label">Trap 12 · Attack-surface categories · 10 Oct</span><p>Only <strong>N-S-H</strong>: <strong>Network, Software, Human</strong>. Human IS a category. Anything else (e.g. "cryptographic") is the NOT answer.</p></li>
+    <li><span class="label">Trap 13 · Surface × depth · 11 Oct</span><p>Count the bad things: <strong>large</strong> surface and <strong>shallow</strong> layering. 0 bad → low, 1 bad → <strong>medium</strong>, 2 bad → high. Large + deep is <strong>medium</strong>, not low.</p></li>
+    <li><span class="label">Trap 14 · Reading attack trees · 11 Oct</span><p>Labels (P/I, difficulty) are <strong>given facts</strong>, don't argue with them. Read each node as a sentence: OR = "either… or", AND = "both… and". Defender: AND → block <strong>one</strong> child; OR → block <strong>all</strong> children.</p></li>
+    <li><span class="label">Trap 15 · Optimistic security · 10 Oct</span><p><strong>Tolerate temporary violations</strong> that are easy to detect and correct, when the violator is accountable. "Never allow any deviation" is the pessimistic opposite.</p></li>
+    <li><span class="label">Trap 16 · Origin vs nonrepudiation · 11 Oct</span><p>"Came from" / "source" → <strong>data origin authentication</strong> (convinces the receiver). "Can't deny" / "prove it to a third party" → <strong>nonrepudiation</strong>.</p></li>
   </ol>
 </section>
 
@@ -443,6 +467,89 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   </div>
 </section>
 
+<section id="surface">
+  <div class="sec-head">
+    <span class="label">Slides 51–52</span>
+    <h2>Attack surface</h2>
+    <p><strong>The reachable and exploitable vulnerabilities in a system.</strong> Every port, form, parser and person an attacker can reach is a door.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Category</th><th>Covers</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Network</td><td>Enterprise network, WAN or Internet: protocol vulnerabilities (e.g. for DoS), link disruption, intruder attacks</td></tr>
+        <tr><td class="key">Software</td><td>Application, utility or OS code, especially <strong>web server software</strong></td></tr>
+        <tr><td class="key">Human</td><td>Personnel or outsiders: <strong>social engineering, human error, trusted insiders</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Slide 51 examples: open ports on outward-facing servers and the code listening on them · services inside a firewall · code that processes incoming data, email, XML and office documents · SQL and web forms · an employee with sensitive access who is vulnerable to social engineering.</p>
+  <h3>Surface × depth (slide 52)</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th></th><th>Small surface</th><th>Large surface</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Deep layering</td><td class="low">Low risk</td><td class="med">Medium risk</td></tr>
+        <tr><td class="key">Shallow layering</td><td class="med">Medium risk</td><td class="high">High risk</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <span class="label">Count the bad things</span>
+    <p>Large surface = 1 bad thing. Shallow layering = 1 bad thing. <strong>0 → low, 1 → medium, 2 → high.</strong> Shrink the surface (fewer doors) <em>and</em> deepen the layering (more locks behind each door): the two complement each other.</p>
+  </div>
+</section>
+
+<section id="trees">
+  <div class="sec-head">
+    <span class="label">Slides 53–59</span>
+    <h2>Attack trees</h2>
+    <p><strong>A branching, hierarchical data structure that represents a set of potential techniques for exploiting security vulnerabilities.</strong></p>
+  </div>
+  <div class="split">
+    <div class="panel"><span class="label">Parts</span><ul><li><strong>Root</strong>: the attacker's goal (the security incident)</li><li><strong>Branches</strong>: subgoals, refined step by step</li><li><strong>Leaves</strong>: different ways to <em>initiate</em> the attack</li><li>Branches can be <strong>labelled</strong> with difficulty, cost or risk to compare paths</li></ul></div>
+    <div class="panel"><span class="label">AND vs OR</span><ul><li><strong>OR</strong>: any <em>one</em> child is enough. Defender must block <strong>every</strong> child</li><li><strong>AND</strong>: <em>all</em> children are needed. Defender blocks <strong>one</strong> child and the branch dies</li></ul></div>
+  </div>
+  <h3>Change a final grade on the school portal (slides 57–58)</h3>
+  <ul class="tree">
+    <li><span class="root">Change a final grade</span><span class="gate or">OR</span>
+      <ul>
+        <li>A. Steal the teacher's password<span class="gate or">OR</span>
+          <ul>
+            <li>Phishing email</li>
+            <li>Shoulder surfing</li>
+            <li>Hardware keylogger<span class="gate and">AND</span>
+              <ul><li>Physical access to the desk</li><li>Plug in a USB keylogger</li></ul>
+            </li>
+          </ul>
+        </li>
+        <li>B. Access an unlocked computer<span class="gate and">AND</span>
+          <ul><li>Teacher leaves the desk unattended</li><li>Open the portal and edit the grade</li></ul>
+        </li>
+        <li>C. Exploit a software defect<span class="gate or">OR</span>
+          <ul><li>SQL injection</li><li>Guess the default password</li></ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <div class="table">
+    <table>
+      <thead><tr><th>Method</th><th>Difficulty</th><th>Risk of getting caught</th><th>Defence</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Phishing email</td><td>Low</td><td>Low to medium</td><td>MFA</td></tr>
+        <tr><td class="key">Unattended computer</td><td>Very low</td><td>Very high</td><td>Auto-lock after 2 min</td></tr>
+        <tr><td class="key">Shoulder surfing</td><td>Low</td><td>High</td><td>Privacy screen filters</td></tr>
+        <tr><td class="key">SQL injection</td><td>High</td><td>Low</td><td>Sanitise input fields</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <span class="label">Why B is easy to defend</span>
+    <p>It's an <strong>AND</strong> branch, so removing one condition (auto-lock the screen) kills the whole branch. Other examples on the slides: Schneier's "open safe" tree (P = possible, I = impossible) and internet banking (all OR nodes; user terminal, comms channel, banking server).</p>
+  </div>
+  <p class="source">Lecturer: "Anybody who's interested in working in the red team… this should be really burnt in your brain" (transcript 1:43).</p>
+</section>
+
 <section id="dns">
   <div class="sec-head">
     <span class="label">Week 2 preview · L02 slides 14–19</span>
@@ -463,6 +570,44 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <p class="source">Defences such as DNSSEC and DNS over HTTPS are background knowledge, not taught yet.</p>
 </section>
 
+<section id="hashing">
+  <div class="sec-head">
+    <span class="label">Week 2 · L02 slides 23, 31, 46 + captions</span>
+    <h2>Hashing vs encryption</h2>
+    <p>A <strong>hash function</strong> turns any amount of data into a short, <strong>fixed-size</strong> value (a <strong>message digest</strong>). It's <strong>one-way</strong>: you can't get the data back. Same data → same hash; a tiny change → a completely different hash. So it gives <strong>integrity</strong>, not confidentiality.</p>
+  </div>
+  <div class="callout">
+    <span class="label">Lecturer's analogies</span>
+    <p><strong>Paint:</strong> yellow + blue = green, but from the green you can't tell how much of each went in. <strong>Counting the Es</strong> in a long text: the count lets you check the text, but it can't rebuild it.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th></th><th>Hash</th><th>Encryption</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Reversible?</td><td><strong>No</strong>, one-way</td><td><strong>Yes</strong>, with the key</td></tr>
+        <tr><td class="key">Output size</td><td>Fixed (SHA-1 = 160 bits, SHA-256 = 256)</td><td>About the input's size</td></tr>
+        <tr><td class="key">Gives you</td><td class="loss">Integrity (detects change)</td><td class="loss">Confidentiality</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Hash vs MAC vs signature</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th></th><th>What it is</th><th>Proves who made it?</th><th>Where on the slides</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Plain hash</td><td>hash(data)</td><td>No: an attacker can change the data <em>and</em> recompute the hash</td><td>—</td></tr>
+        <tr><td class="key">MAC / HMAC</td><td>Hash with a <strong>shared secret key</strong></td><td>Yes, someone with the key (no nonrepudiation)</td><td>IPsec AH; SSL Record step 3</td></tr>
+        <tr><td class="key">Digital signature</td><td>The hash encrypted with the sender's <strong>private key</strong></td><td>Yes, plus <strong>nonrepudiation</strong></td><td>PGP: 160-bit SHA digest (slide 31)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="split">
+    <div class="panel"><span class="label">Trap: MAC ≠ MAC address</span><p>In AH and SSL, <strong>MAC = message authentication code</strong>. In the data-link header it's a hardware address.</p></div>
+    <div class="panel"><span class="label">Why both?</span><p>Encryption keeps the data <strong>secret</strong>; the hash shows whether it was <strong>changed</strong> (captions l.916–922).</p></div>
+  </div>
+  <p class="source">"Hashing is a very big topic" (l.882), but NSS only wants the top layer: one-way, detects change, not the same as encryption.</p>
+</section>
+
 <section id="quiz">
   <div class="sec-head">
     <span class="label">Tap an option to check it</span>
@@ -476,8 +621,8 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 </section>
 
 <footer>
-  <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 lecture notes, FIPS 199 notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Next: attack trees and attack surface (rest of week 1), then week 2.</p>
+  <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 and L02 lecture notes and my question bank). Quotes are from the module's lecture materials.</p>
+  <p>Updated 12 Oct. Next: the rest of week 1 (NIST definition + 10 challenges, threats, NCSC), then the rest of week 2 (network stack, PGP, IPsec, TLS).</p>
 </footer>
 </div>
 
@@ -546,7 +691,37 @@ const QUESTIONS = [
   { s: "A new entry check takes so long that staff start propping the side door open. Which principle was ignored?", o: ["psychological acceptability","economy of mechanism","complete mediation","fail-safe defaults","isolation"], a: 0,
     w: "If security gets in the way of people's work, they bypass it." },
   { s: "A button labelled \"Encrypt\" only hides the message preview; the message is still sent unencrypted. Which principle does this break most clearly?", o: ["open design","least astonishment","fail-safe defaults","isolation","economy of mechanism"], a: 1,
-    w: "The system doesn't behave the way the user expects." }
+    w: "The system doesn't behave the way the user expects." },
+  { s: "Which of these is NOT one of the three attack surface categories?", o: ["network","software","human","cryptographic","none, all four are categories"], a: 3, m: "10 Oct",
+    w: "N-S-H: Network, Software, Human. Human IS a category (social engineering, human error, trusted insiders)." },
+  { s: "A system has a small attack surface and deep layering. Its security risk is:", o: ["low","medium","high","critical","impossible to judge"], a: 0,
+    w: "0 bad things (small surface, deep layering) → low." },
+  { s: "A system has a large attack surface but deep layering. Its security risk is:", o: ["low","medium","high","critical","negligible"], a: 1, m: "11 Oct",
+    w: "1 bad thing (large surface) → medium. Deep layering doesn't make it low." },
+  { s: "A system has a large attack surface and shallow layering. Its security risk is:", o: ["low","medium","high","negligible","the same as small surface + deep layering"], a: 2,
+    w: "2 bad things → high." },
+  { s: "A trusted employee with access to sensitive data could be tricked by a phishing email. Which attack surface category is this?", o: ["network","software","human","physical","cryptographic"], a: 2,
+    w: "Social engineering and trusted insiders are the human attack surface." },
+  { s: "In an attack tree, a node whose goal is achieved if any ONE of its children succeeds is:", o: ["a root node","a leaf node","an AND-node","an OR-node","an asset node"], a: 3,
+    w: "OR = either… or. AND needs all of its children." },
+  { s: "In an attack tree, the root node represents:", o: ["the cheapest attack","the attacker's goal (the security incident)","the first step the attacker takes","the defender's countermeasure","the most likely vulnerability"], a: 1,
+    w: "Root = the goal. Leaves = the different ways to initiate the attack." },
+  { s: "To stop an attacker reaching a goal through an OR branch, the defender must block:", o: ["any one child","the cheapest child only","every child","the root only","nothing, OR branches can't be blocked"], a: 2, m: "11 Oct",
+    w: "OR means any one child is enough for the attacker, so every child must be blocked. For an AND branch, blocking one child is enough." },
+  { s: "\"Access an unlocked computer\" is an AND of (teacher leaves desk unattended) and (open portal and edit grade). Which single defence kills this branch?", o: ["MFA","auto-lock the screen after 2 minutes","privacy screen filters","sanitising input fields","longer passwords"], a: 1,
+    w: "AND branch: remove one condition. Auto-lock means an unattended desk no longer gives access." },
+  { s: "In the change-a-grade attack tree, which method is the hardest but least likely to get you caught?", o: ["phishing email","shoulder surfing","unattended computer","SQL injection","hardware keylogger"], a: 3,
+    w: "SQL injection: difficulty high, risk of getting caught low. Defence: sanitise input fields." },
+  { s: "A receiver hashes the message she received and gets a different value from the hash sent with it. What can she conclude?", o: ["the wrong key was used","the message (or the hash) was changed in transit","the sender's private key was stolen","the message is confidential","nothing, hashes differ every time"], a: 1,
+    w: "Hashing is deterministic: same data, same hash. A mismatch means something changed." },
+  { s: "Hashing on its own mainly provides which property?", o: ["confidentiality","integrity","availability","anonymity","access control"], a: 1,
+    w: "A hash detects change. Confidentiality comes from encryption." },
+  { s: "In IPsec AH, the Authentication Data is \"the MAC calculated using SHA-1 or HMAC\". MAC here means:", o: ["Media Access Control address","Message Authentication Code","Mandatory Access Control","Master Authentication Certificate","Multi-Algorithm Cipher"], a: 1,
+    w: "A keyed hash for integrity and authentication. The hardware MAC address is the trap." },
+  { s: "Why does PGP encrypt the 160-bit SHA digest with the sender's PRIVATE key?", o: ["so only the receiver can read it","so anyone with her public key can check it came from her (authentication + nonrepudiation)","because public keys can't encrypt","to compress the message","to hide the session key"], a: 1,
+    w: "That's a digital signature. Only she has the private key, so she can't deny it." },
+  { s: "Someone receives a single email and wants assurance it really came from the claimed sender. No connection, no dispute, no third party. Which service?", o: ["peer entity authentication","data origin authentication","access control","nonrepudiation","connectionless confidentiality"], a: 1, m: "11 Oct",
+    w: "\"Came from\" → origin. Nonrepudiation is for when someone later denies it and you must prove it to a third party." }
 ];
 const L = "ABCDE";
 const qs = document.getElementById("qs");
