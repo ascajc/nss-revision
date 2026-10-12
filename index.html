@@ -201,21 +201,25 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <span class="label">Network &amp; Systems Security · Week 1 + start of week 2</span>
   <h1>CIA, attacks, standards, services, principles, attack surface, attack trees and hashing</h1>
   <div class="meta">
-    <span class="pill warn">Test 1 · Wed 14 Oct (unconfirmed)</span>
-    <span class="pill">20 MCQs · 5 options · 30 min</span>
+    <span class="pill warn">Test 1 · Wed 14 Oct · on paper, lab slot</span>
+    <span class="pill">~20 MCQs · 5 options · 20–30 min</span>
     <span class="pill">Part 1 · 7 Oct · 7/12</span>
     <span class="pill">Part 2 · 9 Oct · 19/27</span>
     <span class="pill">Learn quiz · 10 Oct · 13/15</span>
     <span class="pill">Weak spots · 11 Oct · 9/10</span>
+    <span class="pill">Week 1 finish · 12 Oct · 10/14</span>
   </div>
 </header>
 
 <nav aria-label="Topics">
   <ul>
     <li><a href="#traps">Traps</a></li>
+    <li><a href="#concepts">Definitions</a></li>
     <li><a href="#cia">CIA</a></li>
     <li><a href="#fips">Impact levels</a></li>
     <li><a href="#attacks">Attacks</a></li>
+    <li><a href="#threats">Motives + scenarios</a></li>
+    <li><a href="#incidents">Real incidents</a></li>
     <li><a href="#standards">Standards</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#principles">Principles</a></li>
@@ -231,7 +235,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <div class="sec-head">
     <span class="label">Read first</span>
     <h2>Your traps</h2>
-    <p class="source">From my wrong answers, 7 to 11 Oct</p>
+    <p class="source">From my wrong answers, 7 to 12 Oct</p>
   </div>
   <ol class="traps">
     <li><span class="label">Trap 1 · CIA wording · 7 Oct</span><p><strong>Disclosure</strong> is a loss of confidentiality, not integrity. Integrity = <strong>modification or destruction</strong>.</p></li>
@@ -249,8 +253,38 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><span class="label">Trap 13 · Surface × depth · 11 Oct</span><p>Count the bad things: <strong>large</strong> surface and <strong>shallow</strong> layering. 0 bad → low, 1 bad → <strong>medium</strong>, 2 bad → high. Large + deep is <strong>medium</strong>, not low.</p></li>
     <li><span class="label">Trap 14 · Reading attack trees · 11 Oct</span><p>Labels (P/I, difficulty) are <strong>given facts</strong>, don't argue with them. Read each node as a sentence: OR = "either… or", AND = "both… and". Defender: AND → block <strong>one</strong> child; OR → block <strong>all</strong> children.</p></li>
     <li><span class="label">Trap 15 · Optimistic security · 10 Oct</span><p><strong>Tolerate temporary violations</strong> that are easy to detect and correct, when the violator is accountable. "Never allow any deviation" is the pessimistic opposite.</p></li>
-    <li><span class="label">Trap 16 · Origin vs nonrepudiation · 11 Oct</span><p>"Came from" / "source" → <strong>data origin authentication</strong> (convinces the receiver). "Can't deny" / "prove it to a third party" → <strong>nonrepudiation</strong>.</p></li>
+    <li><span class="label">Trap 16 · Origin vs nonrepudiation · 11 Oct · right 2/2 on 12 Oct</span><p>"Came from" / "source" → <strong>data origin authentication</strong> (convinces the receiver). "Can't deny" / "prove it to a third party" → <strong>nonrepudiation</strong>.</p></li>
+    <li><span class="label">Trap 17 · Where is the data? · 12 Oct</span><p>A message travelling <strong>between</strong> two parties → <strong>in transit</strong> (eavesdropper, middle-person). Sitting in storage (disc, backup tape, stolen drive) → <strong>at rest</strong>. A device <strong>busy computing</strong> (timing, power, sound, voltage glitch) → <strong>in use</strong> (side channel, fault injection). No message on a wire = not in transit.</p></li>
+    <li><span class="label">Trap 18 · Authenticity vs accountability · 12 Oct</span><p><strong>Account</strong>-ability = keep an account: actions <strong>traced</strong> to you, logs, forensics ("who <em>did</em> it?", after). <strong>Authentic</strong>-ity = genuine, verifiable, trusted source ("is it <em>real</em>?", at the door).</p></li>
   </ol>
+</section>
+
+<section id="concepts">
+  <div class="sec-head">
+    <span class="label">Slides 17–21</span>
+    <h2>What security means + the 10 challenges</h2>
+    <p>Paper → computer → cloud → AI. Each move was rushed, so new systems <strong>inherit the old weaknesses</strong> (transcript 0:35).</p>
+  </div>
+  <div class="split">
+    <div class="panel"><span class="label">Computer security</span><p>About <strong>devices / end points</strong>. "The generic name for the collection of tools designed to protect data and to prevent hackers."</p></div>
+    <div class="panel"><span class="label">Internet security</span><p>About data <strong>in transmission</strong>. Measures to <strong>deter, prevent, detect and correct</strong> breaches.</p></div>
+  </div>
+  <div class="callout">
+    <span class="label">NIST definition (slide 21)</span>
+    <p>"The protection afforded to an <strong>automated information system</strong> in order to attain the applicable objectives of preserving the <strong>integrity, availability, and confidentiality</strong> of information system resources (includes <strong>hardware, software, firmware, information/data, and telecommunications</strong>)."<br>Resources = <strong>H-S-F-I-T</strong>. People are NOT on the list.</p>
+  </div>
+  <h3>The 10 challenges in 3 buckets (slide 20)</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th>Bucket</th><th>Challenges</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Hard to build</td><td>1 not simple · 2 the security features get attacked · 3 counter-intuitive procedures · 4 where to place mechanisms (network point, layer) · 5 more than an algorithm (keys, timing)</td></tr>
+        <tr><td class="key">Attacker vs defender</td><td>6 <strong>battle of wits</strong>: the attacker needs <strong>one</strong> weakness, the designer must remove <strong>all</strong></td></tr>
+        <tr><td class="key">People + organisation</td><td>7 no perceived benefit until a failure · 8 needs <strong>constant monitoring</strong> · 9 an <strong>afterthought</strong> · 10 seen as an <strong>impediment</strong> to user-friendly operation</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="source">"There is no one solution that will solve everything." Major attacks "take months or even years of planning" (transcript 0:39–0:40).</p>
 </section>
 
 <section id="cia">
@@ -283,7 +317,8 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
       </tbody>
     </table>
   </div>
-  <p>Two extra requirements (slide 26): <strong>authenticity</strong> (genuine, verifiable, from a trusted source) and <strong>accountability</strong> (actions traced uniquely to an entity, so records exist for forensics).</p>
+  <p>Two extra requirements (slide 26): <strong>authenticity</strong> (genuine, verifiable, from a trusted source) and <strong>accountability</strong> (actions traced uniquely to an entity, so records exist for forensics). Together with CIA they make the <strong>pentagon</strong>.</p>
+  <div class="callout"><span class="label">Keyword map</span><p>traced, records, logs, forensic, audit → <strong>accountability</strong>. Genuine, verifiable, trusted source, who they say they are → <strong>authenticity</strong>.</p></div>
 </section>
 
 <section id="fips">
@@ -335,6 +370,66 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <span class="label">Lecturer's DNS example</span>
     <p>Listening to DNS queries = <strong>passive</strong>. Changing the returned IP to send the victim to a fake site = <strong>active</strong>.</p>
   </div>
+</section>
+
+<section id="threats">
+  <div class="sec-head">
+    <span class="label">Slides 33–35</span>
+    <h2>Malicious behaviour + threat scenarios</h2>
+    <p>Ask what the attacker <strong>wants</strong>.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Motive</th><th>Behaviour</th><th>Course wording</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Business</td><td>Fraud / theft</td><td>unauthorised access to money, goods or services</td></tr>
+        <tr><td class="key">Business</td><td>Espionage</td><td><strong>stealing information</strong> for competitive advantage</td></tr>
+        <tr><td class="key">Business</td><td>Sabotage</td><td><strong>causing damage</strong> for competitive advantage</td></tr>
+        <tr><td class="key">Personal</td><td>Vandalism</td><td>damage for personal reasons (revenge, envy, curiosity, peer recognition)</td></tr>
+        <tr><td class="key">Political</td><td>Terrorism</td><td>damage, disruption and <strong>fear to intimidate</strong></td></tr>
+        <tr><td class="key">Political</td><td>Warfare</td><td>damaging <strong>military</strong> assets to overthrow a government</td></tr>
+        <tr><td class="key">Content</td><td>Spam</td><td>unsolicited marketing wasting time and resources</td></tr>
+        <tr><td class="key">Content</td><td>Illegal content</td><td>CSAM, copyright, hate speech… (jurisdiction) ↔ censorship</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Espionage <strong>takes</strong>, sabotage <strong>breaks</strong>. Vandalism is personal, sabotage is business.</p>
+  <h3>Threat scenarios: where is the data?</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th>State</th><th>Paper-letter picture</th><th>Scenario</th></tr></thead>
+      <tbody>
+        <tr><td class="key">In transit</td><td>in the post: someone reads it</td><td><strong>Eavesdropper</strong> (Eve), passive</td></tr>
+        <tr><td class="key">In transit</td><td>in the post: someone swaps it</td><td><strong>Middle-person</strong> (Mallory), active, e.g. a rogue hotspot</td></tr>
+        <tr><td class="key">At rest</td><td>in a drawer: someone breaks in</td><td><strong>Storage security</strong> (Alice's disc)</td></tr>
+        <tr><td class="key">In use</td><td>on the desk: someone watches your pauses</td><td><strong>Side channel</strong> (timing, power, sound)</td></tr>
+        <tr><td class="key">In use</td><td>on the desk: someone jogs your elbow</td><td><strong>Fault injection</strong> (voltage glitch, heat)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><span class="label">Lecturer's scam example (transcript 1:01)</span><p>Victim opens their <strong>real</strong> bank site; scammers <strong>alter the HTML in transit</strong> to show extra money, then ask for it "back". Middle-person, active, data in transit.</p></div>
+</section>
+
+<section id="incidents">
+  <div class="sec-head">
+    <span class="label">Lab 01 Part 1</span>
+    <h2>Real incidents: which letter?</h2>
+    <p>Go by the <strong>harm</strong>, not the technique. Seen → C. Changed → I. Unusable → A.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Case</th><th>Harm</th><th>Primary</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Equifax 2017</td><td>~150m people's personal and financial data stolen</td><td class="loss">C</td></tr>
+        <tr><td class="key">Stuxnet</td><td>altered centrifuge control so they destroyed themselves (A secondary)</td><td class="loss">I</td></tr>
+        <tr><td class="key">Dyn 2016</td><td>Mirai botnet DDoS: Twitter, Spotify, Reddit unreachable</td><td class="loss">A</td></tr>
+        <tr><td class="key">Colonial Pipeline 2021</td><td>ransomware → fuel pipeline shut down for days (encryption = I, secondary)</td><td class="loss">A</td></tr>
+        <tr><td class="key">MOVEit 2023</td><td>zero-day, mass data theft (supply chain)</td><td class="loss">C</td></tr>
+        <tr><td class="key">SolarWinds 2020</td><td>trojanised build + Orion update, stealthy access (supply chain; C secondary)</td><td class="loss">I</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>MOVEit and SolarWinds are both <strong>supply-chain</strong> attacks: MOVEit <strong>stole</strong>, SolarWinds <strong>tampered</strong>.</p>
 </section>
 
 <section id="standards">
@@ -622,7 +717,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <footer>
   <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 and L02 lecture notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Updated 12 Oct. Next: the rest of week 1 (NIST definition + 10 challenges, threats, NCSC), then the rest of week 2 (network stack, PGP, IPsec, TLS).</p>
+  <p>Updated 12 Oct (night). Next: NCSC (10 Steps, CAF) speed round, then week 2 (network stack, crypto basics, PGP, IPsec; TLS light).</p>
 </footer>
 </div>
 
@@ -721,7 +816,33 @@ const QUESTIONS = [
   { s: "Why does PGP encrypt the 160-bit SHA digest with the sender's PRIVATE key?", o: ["so only the receiver can read it","so anyone with her public key can check it came from her (authentication + nonrepudiation)","because public keys can't encrypt","to compress the message","to hide the session key"], a: 1,
     w: "That's a digital signature. Only she has the private key, so she can't deny it." },
   { s: "Someone receives a single email and wants assurance it really came from the claimed sender. No connection, no dispute, no third party. Which service?", o: ["peer entity authentication","data origin authentication","access control","nonrepudiation","connectionless confidentiality"], a: 1, m: "11 Oct",
-    w: "\"Came from\" → origin. Nonrepudiation is for when someone later denies it and you must prove it to a third party." }
+    w: "\"Came from\" → origin. Nonrepudiation is for when someone later denies it and you must prove it to a third party." },
+  { s: "A mail server receives a single email and checks that it really came from the sender it claims. Nobody has to prove anything to a third party. Which X.800 service?", o: ["nonrepudiation", "data origin authentication", "peer entity authentication", "data confidentiality", "access control"], a: 1,
+    w: "Single message, \"came from\" → origin. Peer entity authentication is for a live connection." },
+  { s: "A supplier signs and sends a contract, then months later says they never sent it. Which service lets the buyer prove it to a court?", o: ["data origin authentication", "data integrity", "nonrepudiation", "availability service", "traffic-flow confidentiality"], a: 2,
+    w: "\"Can't deny\" + a third party → nonrepudiation." },
+  { s: "In the NIST definition of computer security, which is NOT listed as an information system resource?", o: ["hardware", "firmware", "telecommunications", "personnel", "information/data"], a: 3,
+    w: "H-S-F-I-T: hardware, software, firmware, information/data, telecommunications. People aren't listed." },
+  { s: "A security team patches 99 vulnerabilities, but an attacker gets in through the 100th. Which challenge does this show?", o: ["security is not simple", "a battle of wits between perpetrator and designer", "security is too often an afterthought", "security requires constant monitoring", "little perceived benefit until a failure occurs"], a: 1,
+    w: "The attacker needs one weakness; the designer must eliminate all of them." },
+  { s: "An insider for a rival firm plants malware that corrupts a competitor's production database so it misses a launch. Which malicious behaviour?", o: ["espionage", "vandalism", "sabotage", "fraud", "terrorism"], a: 2,
+    w: "Damage for competitive advantage = sabotage. Espionage would steal information instead." },
+  { s: "An attacker measures how long a smartcard takes to check PINs and how much power it draws, to work out its key. Which threat scenario?", o: ["eavesdropper on data in transit", "middle-person attack on data in transit", "storage security attack on data at rest", "side channel attack on data in use", "traffic analysis"], a: 3, m: "12 Oct",
+    w: "Nothing is being sent; the card is computing. Watching its timing and power is a side channel on data in use." },
+  { s: "A thief steals a laptop, removes the unencrypted drive and reads the files on another computer. Which threat scenario?", o: ["eavesdropper on data in transit", "storage security attack on data at rest", "side channel attack on data in use", "middle-person attack on data in transit", "fault injection on data in use"], a: 1, m: "12 Oct",
+    w: "The drive is the drawer: stored data, not moving, not being processed. At rest." },
+  { s: "An attacker briefly drops the voltage to a payment terminal's chip while it checks a signature, so it accepts a fake card. Which threat scenario?", o: ["middle-person attack on data in transit", "storage security attack on data at rest", "fault injection on data in use", "eavesdropper on data in transit", "denial of service"], a: 2, m: "12 Oct",
+    w: "The chip is busy computing; the glitch \"jogs its elbow\". Fault injection, data in use." },
+  { s: "Which requirement says an entity's actions must be traceable uniquely to it, supported by records for forensic analysis?", o: ["authenticity", "accountability", "nonrepudiation", "integrity", "access control"], a: 1, m: "12 Oct",
+    w: "Traced, records, forensics → accountability. Authenticity = genuine and verifiable." },
+  { s: "In the lecture's examples, which has a MODERATE integrity requirement?", o: ["hospital patient allergy information", "an anonymous online poll", "a web forum for registered users", "student grade information", "an authentication service for critical systems"], a: 2,
+    w: "Allergy (death) = high, forum (annoying) = moderate, poll (understood) = low." },
+  { s: "Every time a nurse opens a patient record, the system logs the nurse's ID and the time so investigators can see who viewed it. Which requirement?", o: ["authenticity", "availability", "accountability", "confidentiality", "integrity"], a: 2,
+    w: "Who DID what, after the event → accountability." },
+  { s: "Before installing an update, a device checks the update is genuine and really from the manufacturer. Which requirement?", o: ["accountability", "authenticity", "availability", "traffic padding", "confidentiality"], a: 1,
+    w: "Is it real, at the door → authenticity." },
+  { s: "An attacker changes employees' bank account numbers in a council payroll system so salaries go to the attacker. Primary principle compromised?", o: ["confidentiality", "integrity", "availability", "nonrepudiation", "traffic-flow confidentiality"], a: 1,
+    w: "Data changed → integrity." }
 ];
 const L = "ABCDE";
 const qs = document.getElementById("qs");
