@@ -133,12 +133,13 @@ td.key { font-weight: 600; white-space: nowrap; }
 
 /* X.800 flow */
 .flow { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); align-items: stretch; gap: 6px; }
+.flow.four { grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); }
 .node { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: grid; gap: 4px; align-content: start; min-width: 0; }
 .node b { font-family: var(--f-display); font-size: 1rem; }
 .node span { font-size: 0.82rem; color: var(--muted); }
 .arrow { align-self: center; font: 600 1rem/1 var(--f-mono); color: var(--muted); }
 @media (max-width: 30rem) {
-  .flow { grid-template-columns: minmax(0,1fr); }
+  .flow, .flow.four { grid-template-columns: minmax(0,1fr); }
   .arrow { justify-self: center; transform: rotate(90deg); }
 }
 
@@ -198,7 +199,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <div class="wrap">
 <header>
-  <span class="label">Network &amp; Systems Security · Week 1 + start of week 2</span>
+  <span class="label">Network &amp; Systems Security · All of week 1 + start of week 2</span>
   <h1>CIA, attacks, standards, services, principles, attack surface, attack trees and hashing</h1>
   <div class="meta">
     <span class="pill warn">Test 1 · Wed 14 Oct · on paper, lab slot</span>
@@ -221,6 +222,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><a href="#threats">Motives + scenarios</a></li>
     <li><a href="#incidents">Real incidents</a></li>
     <li><a href="#standards">Standards</a></li>
+    <li><a href="#ncsc">NCSC</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#principles">Principles</a></li>
     <li><a href="#surface">Surface</a></li>
@@ -470,6 +472,101 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <p>"Threat is the potential, attack is the action."</p>
 </section>
 
+<section id="ncsc">
+  <div class="sec-head">
+    <span class="label">Slides 36–38, 60 · reading for the commute</span>
+    <h2>UK guidance: NCSC, 10 Steps and CAF</h2>
+    <p>Whether the 10 Steps and CAF are in Test 1 is <strong>unknown</strong>, so know the headlines, not every detail.</p>
+  </div>
+
+  <h3>Who the NCSC is</h3>
+  <p>The UK's <strong>National Cyber Security Centre</strong>, part of <strong>GCHQ</strong>. Its predecessor was <strong>CESG</strong>. The lecturer: "If you want to dig deep in cybersecurity, especially about the UK systems and policies, this is the best source where you'll find <strong>validated</strong> information" (transcript 1:07). A lot of other material "is around the States, a lot of it is outdated".</p>
+  <ul>
+    <li>responds to and manages <strong>major cyber incidents</strong></li>
+    <li>publishes <strong>guidance, best practice and frameworks</strong> for organisations of all sizes</li>
+    <li>works with <strong>law enforcement, intelligence agencies and international partners</strong></li>
+    <li>supports the secure development and use of <strong>emerging technologies</strong></li>
+    <li>promotes <strong>cyber resilience</strong> across government, industry, academia and civil society</li>
+  </ul>
+
+  <h3>The 3 bodies on slide 60</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th>Body</th><th>What it is</th><th>Publishes</th></tr></thead>
+      <tbody>
+        <tr><td class="key">NIST</td><td>US federal agency: measurement science, standards and technology</td><td><strong>FIPS</strong> + <strong>Special Publications (SP)</strong>, worldwide impact; also the NIST Cybersecurity Framework</td></tr>
+        <tr><td class="key">ISOC</td><td>Internet Society: professional membership society, home of the <strong>IETF</strong> and <strong>IAB</strong></td><td>Internet standards as <strong>RFCs</strong> (e.g. RFC 4949)</td></tr>
+        <tr><td class="key">NCSC</td><td>UK authority, part of GCHQ</td><td><strong>10 Steps</strong>, <strong>CAF</strong>, guidance</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>10 Steps to Cyber Security (slides 36–37)</h3>
+  <p>First published in <strong>2012 by CESG</strong>, refreshed around <strong>2021</strong> for cloud, home and mobile working, ransomware and a new <strong>supply chain</strong> section. Audience: <strong>security professionals and technical staff in medium and large organisations</strong>. Board members get the separate <strong>Cyber Security Board Toolkit</strong> (2019). It's <strong>guidance</strong>, not a standard or a certification.</p>
+  <div class="callout"><span class="label">The ring around it</span><p>Understand your organisation's <strong>risks</strong> → implement appropriate <strong>mitigations</strong> → <strong>prepare</strong> for cyber incidents. <strong>Risk management sits in the centre</strong>: start there.</p></div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Group</th><th>Step</th><th>NCSC wording</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Centre</td><td><strong>Risk management</strong></td><td>take a risk-based approach to securing your data and systems</td></tr>
+        <tr><td class="key">People</td><td>Engagement and training</td><td>collaboratively build security that works for people in your organisation</td></tr>
+        <tr><td class="key">People</td><td>Identity and access management</td><td>control <strong>who and what</strong> can access your systems and data</td></tr>
+        <tr><td class="key">Your stuff</td><td>Asset management</td><td><strong>know what</strong> data and systems you have and what business need they support</td></tr>
+        <tr><td class="key">Your stuff</td><td>Architecture and configuration</td><td><strong>design, build, maintain and manage</strong> systems securely</td></tr>
+        <tr><td class="key">Your stuff</td><td>Vulnerability management</td><td>keep your systems protected <strong>throughout their lifecycle</strong></td></tr>
+        <tr><td class="key">Your stuff</td><td>Data security</td><td>protect data <strong>where it is vulnerable</strong></td></tr>
+        <tr><td class="key">Watch + respond</td><td>Logging and monitoring</td><td>design your systems to be able to <strong>detect and investigate</strong> incidents</td></tr>
+        <tr><td class="key">Watch + respond</td><td>Incident management</td><td><strong>plan your response</strong> to cyber incidents <strong>in advance</strong></td></tr>
+        <tr><td class="key">Outside</td><td>Supply chain security</td><td>collaborate with your <strong>suppliers and partners</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="split">
+    <div class="panel"><span class="label">Trap: logging vs incident</span><p><strong>Detect and investigate</strong> → logging and monitoring. <strong>Plan the response in advance</strong> → incident management.</p></div>
+    <div class="panel"><span class="label">Link to Lab 01</span><p>MOVEit + SolarWinds → <strong>supply chain security</strong> (and vulnerability management). Colonial Pipeline → <strong>incident management</strong>.</p></div>
+  </div>
+
+  <h3>Guideline vs framework vs standard (CAF video)</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th>Term</th><th>Means</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Guideline</td><td>a <strong>recommended</strong> strategy, not mandatory</td></tr>
+        <tr><td class="key">Framework</td><td>a <strong>structured set of guidelines</strong>: a blueprint or roadmap</td></tr>
+        <tr><td class="key">Standard</td><td><strong>specific criteria</strong>, more rigid (voluntary or mandatory)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Cyber Assessment Framework, CAF (slide 38, video)</h3>
+  <p>An NCSC <strong>framework</strong> for assessing an organisation's cyber security, aimed especially at <strong>critical infrastructure</strong> (energy, water, transport, health).</p>
+  <div class="flow four" role="list">
+    <div class="node" role="listitem"><b>4 objectives</b><span>A, B, C, D</span></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="node" role="listitem"><b>14 principles</b><span>e.g. B2 = identity and access control</span></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="node" role="listitem"><b>Contributing outcomes</b><span>what good looks like</span></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="node" role="listitem"><b>IGPs</b><span>Indicators of Good Practice: achieved / partially achieved / not achieved</span></div>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Objective</th><th>Focus</th><th>Hook</th></tr></thead>
+      <tbody>
+        <tr><td class="key">A</td><td>Managing security risk: reduce it to an acceptable level (proactive)</td><td><strong>A</strong>ssess risk</td></tr>
+        <tr><td class="key">B</td><td>Protecting against cyber attack</td><td><strong>B</strong>lock</td></tr>
+        <tr><td class="key">C</td><td>Detecting cyber security events</td><td><strong>C</strong>atch</td></tr>
+        <tr><td class="key">D</td><td>Minimising the impact of incidents: <strong>resilience</strong>, withstand and recover</td><td><strong>D</strong>amage control</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul>
+    <li><strong>Profiles:</strong> <strong>baseline</strong> (foundational) and <strong>enhanced</strong> (higher-risk organisations). The organisation chooses.</li>
+    <li>IGPs show <em>how</em> good practice looks: not just "have MFA" but what good MFA looks like.</li>
+  </ul>
+  <div class="callout"><span class="label">The big trap</span><p><strong>You can't be "CAF certified".</strong> CAF is a <strong>self-assessment</strong> tool for continual improvement. <strong>ISO 27001 is the certification.</strong> The NIST CSF and ISO 27001 are broader (any sector); CAF is more specific to critical infrastructure.</p></div>
+</section>
+
 <section id="services">
   <div class="sec-head">
     <span class="label">Slides 24, 41–47 · X.800</span>
@@ -717,7 +814,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <footer>
   <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 and L02 lecture notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Updated 12 Oct (night). Next: NCSC (10 Steps, CAF) speed round, then week 2 (network stack, crypto basics, PGP, IPsec; TLS light).</p>
+  <p>Updated 12 Oct (night): all of week 1 incl. NCSC. Next: week 2 (network stack, crypto basics, PGP, IPsec; TLS light).</p>
 </footer>
 </div>
 
@@ -842,7 +939,41 @@ const QUESTIONS = [
   { s: "Before installing an update, a device checks the update is genuine and really from the manufacturer. Which requirement?", o: ["accountability", "authenticity", "availability", "traffic padding", "confidentiality"], a: 1,
     w: "Is it real, at the door → authenticity." },
   { s: "An attacker changes employees' bank account numbers in a council payroll system so salaries go to the attacker. Primary principle compromised?", o: ["confidentiality", "integrity", "availability", "nonrepudiation", "traffic-flow confidentiality"], a: 1,
-    w: "Data changed → integrity." }
+    w: "Data changed → integrity." },
+  { s: "The NCSC's 10 Steps to Cyber Security recommends starting with:", o: ["risk management","asset management","supply chain security","incident management","logging and monitoring"], a: 0,
+    w: "Risk management sits in the centre of the infographic." },
+  { s: "The 10 Steps guidance was first published in 2012 by:", o: ["NIST","ISOC","the IETF","ENISA","CESG"], a: 4,
+    w: "CESG was the NCSC's predecessor." },
+  { s: "\"Know what data and systems you have and what business need they support\" is which of the 10 Steps?", o: ["risk management","architecture and configuration","data security","asset management","logging and monitoring"], a: 3,
+    w: "Know WHAT you have → asset management." },
+  { s: "\"Design your systems to be able to detect and investigate incidents\" is which of the 10 Steps?", o: ["incident management","logging and monitoring","vulnerability management","engagement and training","risk management"], a: 1,
+    w: "Detect and investigate → logging and monitoring. Incident management is planning the response in advance." },
+  { s: "\"Plan your response to cyber incidents in advance\" is which of the 10 Steps?", o: ["logging and monitoring","data security","risk management","supply chain security","incident management"], a: 4,
+    w: "Planning the response = incident management." },
+  { s: "MOVEit (2023) and SolarWinds (2020) both came in through third-party software. Which of the 10 Steps most directly addresses this?", o: ["supply chain security","asset management","engagement and training","data security","identity and access management"], a: 0,
+    w: "Collaborate with your suppliers and partners. The section was added in the refresh." },
+  { s: "\"Control who and what can access your systems and data\" is which of the 10 Steps?", o: ["architecture and configuration","data security","identity and access management","asset management","risk management"], a: 2,
+    w: "Who and what can access → identity and access management (CAF principle B2 covers the same area)." },
+  { s: "Who is the refreshed 10 Steps guidance mainly aimed at?", o: ["board members","home users","government ministers","small businesses only","security professionals and technical staff in medium and large organisations"], a: 4,
+    w: "Boards use the separate Cyber Security Board Toolkit (2019)." },
+  { s: "The NCSC is part of:", o: ["GCHQ","NIST","ISOC","the IETF","ITU-T"], a: 0,
+    w: "The UK's national cyber security authority, part of GCHQ. Its predecessor was CESG." },
+  { s: "A \"structured set of guidelines\", like a blueprint or roadmap, is called a:", o: ["standard","certification","policy","framework","mechanism"], a: 3,
+    w: "Guideline = recommended. Framework = a structured set of guidelines. Standard = specific, more rigid criteria." },
+  { s: "Which statement about the NCSC Cyber Assessment Framework (CAF) is TRUE?", o: ["it is published by NIST","it is a self-assessment tool aimed especially at critical infrastructure","organisations can be CAF certified","it has 10 objectives","it replaces ISO 27001"], a: 1,
+    w: "4 objectives, NCSC, no certification." },
+  { s: "Which of these is a certification?", o: ["ISO 27001","NCSC 10 Steps","NCSC CAF","FIPS 199","RFC 4949"], a: 0,
+    w: "\"You can't be CAF certified.\" ISO 27001 is the certification." },
+  { s: "Which CAF objective is about resilience: withstanding and recovering from an attack?", o: ["A","B","C","D","none, CAF has no resilience objective"], a: 3,
+    w: "D = minimising the impact of incidents. A = manage risk, B = protect, C = detect." },
+  { s: "A water company's monitoring team spots unusual logins to a control system at 3am. Which CAF objective is this activity under?", o: ["A: managing security risk","B: protecting against cyber attack","C: detecting cyber security events","D: minimising the impact of incidents","none, CAF only covers policy"], a: 2,
+    w: "Spotting unusual or malicious behaviour = detecting (C, \"Catch\")." },
+  { s: "In CAF, each Indicator of Good Practice (IGP) is rated as:", o: ["low / moderate / high","achieved / partially achieved / not achieved","pass / fail","baseline / enhanced","0 to 5"], a: 1,
+    w: "Baseline and enhanced are the profiles." },
+  { s: "The two CAF profiles are:", o: ["low and high","basic and advanced","public and private","baseline and enhanced","achieved and not achieved"], a: 3,
+    w: "Baseline is foundational; enhanced is for higher-risk organisations." },
+  { s: "Which organisation is the home of the IETF and the IAB?", o: ["NIST","ITU-T","ISOC","NCSC","CERT"], a: 2,
+    w: "The Internet Society. Internet standards are published as RFCs." }
 ];
 const L = "ABCDE";
 const qs = document.getElementById("qs");
