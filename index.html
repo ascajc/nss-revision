@@ -209,6 +209,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <span class="pill">Learn quiz · 10 Oct · 13/15</span>
     <span class="pill">Weak spots · 11 Oct · 9/10</span>
     <span class="pill">Week 1 finish · 12 Oct · 10/14</span>
+    <span class="pill">NCSC + stack · 13 Oct · NCSC 6/6</span>
   </div>
 </header>
 
@@ -227,6 +228,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><a href="#principles">Principles</a></li>
     <li><a href="#surface">Surface</a></li>
     <li><a href="#trees">Trees</a></li>
+    <li><a href="#stack">Stack</a></li>
     <li><a href="#dns">DNS</a></li>
     <li><a href="#hashing">Hashing</a></li>
     <li><a href="#quiz">Quiz</a></li>
@@ -258,6 +260,8 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><span class="label">Trap 16 · Origin vs nonrepudiation · 11 Oct · right 2/2 on 12 Oct</span><p>"Came from" / "source" → <strong>data origin authentication</strong> (convinces the receiver). "Can't deny" / "prove it to a third party" → <strong>nonrepudiation</strong>.</p></li>
     <li><span class="label">Trap 17 · Where is the data? · 12 Oct</span><p>A message travelling <strong>between</strong> two parties → <strong>in transit</strong> (eavesdropper, middle-person). Sitting in storage (disc, backup tape, stolen drive) → <strong>at rest</strong>. A device <strong>busy computing</strong> (timing, power, sound, voltage glitch) → <strong>in use</strong> (side channel, fault injection). No message on a wire = not in transit.</p></li>
     <li><span class="label">Trap 18 · Authenticity vs accountability · 12 Oct</span><p><strong>Account</strong>-ability = keep an account: actions <strong>traced</strong> to you, logs, forensics ("who <em>did</em> it?", after). <strong>Authentic</strong>-ity = genuine, verifiable, trusted source ("is it <em>real</em>?", at the door).</p></li>
+    <li><span class="label">Trap 19 · Message vs machine · missed 4× on 13 Oct</span><p><strong>Eavesdropper</strong> hears the <strong>message</strong> on the network. <strong>Side channel</strong> hears the <strong>machine</strong>: power, timing, sound, heat or EM are <em>always</em> side channel. Café example: recording the <strong>clicks of a keyboard</strong> to get the password = side channel. "Silently captures / reads" = eavesdropper; "relays / alters" = middle-person.</p></li>
+    <li><span class="label">Trap 20 · Port, IP, MAC · 13 Oct</span><p>The first letter: <strong>P</strong>ort = which <strong>P</strong>rogram (80 web, 22 SSH). <strong>I</strong>P = where on the <strong>I</strong>nternet (start to end). <strong>M</strong>AC = the <strong>M</strong>achine next door (next hop only). A <strong>router reads the IP</strong>. Read layer <em>names</em>, never the numbers.</p></li>
   </ol>
 </section>
 
@@ -409,6 +413,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
       </tbody>
     </table>
   </div>
+  <div class="callout"><span class="label">The name is the answer (13 Oct)</span><p><strong>Eaves</strong>dropper → listens to the <strong>message</strong>. <strong>Middle</strong>-person → in the middle, so it can <strong>change</strong> it. <strong>Storage</strong> → stored data. <strong>Side</strong> channel → <strong>side effects</strong> of the machine. <strong>Fault</strong> injection → <strong>injects a fault</strong> (glitch, voltage, laser). Two steps: where is the data (moving / stored / being worked on), then which name.</p></div>
   <div class="callout"><span class="label">Lecturer's scam example (transcript 1:01)</span><p>Victim opens their <strong>real</strong> bank site; scammers <strong>alter the HTML in transit</strong> to show extra money, then ask for it "back". Middle-person, active, data in transit.</p></div>
 </section>
 
@@ -742,6 +747,32 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <p class="source">Lecturer: "Anybody who's interested in working in the red team… this should be really burnt in your brain" (transcript 1:43).</p>
 </section>
 
+<section id="stack">
+  <div class="sec-head">
+    <span class="label">Week 2 · L02 slides 5–13</span>
+    <h2>The network stack</h2>
+    <p>"We split the tasks into smaller layers… each task in a layer" (captions l.118–126). Going <strong>down</strong> at the sender, each layer adds a header (<strong>encapsulation</strong>); going <strong>up</strong> at the receiver, each strips one.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Layer</th><th>Job</th><th>Adds</th><th>Examples</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Application</td><td>encodes the message for both ends</td><td>the data</td><td>HTTP(S), DNS, DHCP, PGP</td></tr>
+        <tr><td class="key">Transport</td><td>numbered chunks, to the right <strong>process</strong></td><td class="loss"><strong>Ports</strong></td><td>TCP (handshake, reliable), UDP (quick)</td></tr>
+        <tr><td class="key">Network / Internet</td><td>start to end, <strong>routing</strong></td><td class="loss"><strong>IP addresses</strong></td><td>IPv4, IPv6, IPsec</td></tr>
+        <tr><td class="key">Link (MAC)</td><td>to the <strong>next hop</strong></td><td class="loss"><strong>MAC addresses</strong></td><td>Ethernet, Wi-Fi</td></tr>
+        <tr><td class="key">Physical</td><td>bits → <strong>signals</strong></td><td>—</td><td>fibre, radio</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="mono">[ MAC hdr | IP hdr | TCP/UDP hdr | data ]</p>
+  <div class="split">
+    <div class="panel"><span class="label">Receiving (slide 12)</span><p>Up to the <strong>network</strong> layer. For this host → up through the <strong>port</strong> to the app. Not for this host → <strong>routing</strong>, back down and out another card (a router). Hop by hop (slide 13).</p></div>
+    <div class="panel"><span class="label">Trap: layer numbers</span><p>The slides use three numbering schemes ("Layer 3" = transport on slide 6, network on slide 10). Read the <strong>names</strong>: transport = ports, network = IPs, link = MACs.</p></div>
+  </div>
+  <p class="source">Peer layers: each header "speaks to" the same layer on the other side (l.256). Ports named in the lecture: 80 (web), 22 (SSH).</p>
+</section>
+
 <section id="dns">
   <div class="sec-head">
     <span class="label">Week 2 preview · L02 slides 14–19</span>
@@ -814,7 +845,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <footer>
   <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 and L02 lecture notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Updated 12 Oct (night): all of week 1 incl. NCSC. Next: week 2 (network stack, crypto basics, PGP, IPsec; TLS light).</p>
+  <p>Updated 13 Oct (17:30): NCSC done, network stack added, traps 19–20 (message vs machine; port/IP/MAC). Next: day in the life, crypto basics, hashing, PGP, IPsec, then the mock.</p>
 </footer>
 </div>
 
@@ -973,7 +1004,29 @@ const QUESTIONS = [
   { s: "The two CAF profiles are:", o: ["low and high","basic and advanced","public and private","baseline and enhanced","achieved and not achieved"], a: 3,
     w: "Baseline is foundational; enhanced is for higher-risk organisations." },
   { s: "Which organisation is the home of the IETF and the IAB?", o: ["NIST","ITU-T","ISOC","NCSC","CERT"], a: 2,
-    w: "The Internet Society. Internet standards are published as RFCs." }
+    w: "The Internet Society. Internet standards are published as RFCs." },
+  { s: "An IT team installs security updates on all its servers every month, from the day each server is set up until it's retired. Which of the 10 Steps is this?", o: ["architecture and configuration","vulnerability management","incident management","asset management","engagement and training"], a: 1,
+    w: "Keep systems protected throughout their lifecycle. Architecture and configuration is designing and building them securely." },
+  { s: "After a ransomware attack, a company follows a tested plan to restore its systems from backups, so services are back within hours. Which CAF objective?", o: ["A: managing security risk","B: protecting against cyber attack","C: detecting cyber security events","D: minimising the impact of incidents","none, because the CAF only covers policy"], a: 3,
+    w: "Recovering = D. Spotting it = C. Hook: Assess, Block, Catch, Deal with it." },
+  { s: "An attacker records the electromagnetic emissions from a phone while it signs a payment, and works out the signing key. Which threat scenario?", o: ["eavesdropper on data in transit","side channel attack on data in use","storage security attack on data at rest","middle-person attack on data in transit","traffic analysis"], a: 1, m: "13 Oct",
+    w: "No message, no second party: the phone is working (in use) and leaks EM, a side effect. Middle-person needs two parties talking." },
+  { s: "An attacker puts a microphone next to a laptop and recovers its RSA key from the high-pitched sounds the CPU makes while decrypting.", o: ["middle-person attack on data in transit","storage security attack on data at rest","fault injection on data in use","side channel attack on data in use","eavesdropper on data in transit"], a: 3, m: "13 Oct",
+    w: "It hears the machine, not a message. Sound, power, timing, heat, EM = side channel." },
+  { s: "An attacker sets up a fake Wi-Fi hotspot, passes a user's traffic on to their bank, and changes the payee's account number on the way through.", o: ["side channel attack on data in use","middle-person attack on data in transit","storage security attack on data at rest","fault injection on data in use","traffic analysis"], a: 1, m: "13 Oct",
+    w: "Two parties talking, the attacker sits between them and alters the message." },
+  { s: "An attacker on the same network silently captures unencrypted emails between two members of staff, changing nothing.", o: ["middle-person attack on data in transit","fault injection on data in use","eavesdropper on data in transit","side channel attack on data in use","storage security attack on data at rest"], a: 2, m: "13 Oct",
+    w: "Silently captures = only listens to the message = eavesdropper. Middle-person relays or alters." },
+  { s: "Someone measures how much power a smartcard uses while it checks a PIN, to work out the secret.", o: ["eavesdropper on data in transit","fault injection on data in use","middle-person attack on data in transit","storage security attack on data at rest","side channel attack on data in use"], a: 4, m: "13 Oct",
+    w: "Power is a side effect of the machine. No message is being sent, so it can't be eavesdropping." },
+  { s: "Which header holds the source and destination port numbers?", o: ["MAC header","IP header","TCP/UDP header","Ethernet trailer","the application data"], a: 2,
+    w: "Port = which Program. Added by the transport layer." },
+  { s: "A router receives a packet that isn't addressed to itself. How far up the stack does it go before being forwarded?", o: ["application layer","transport layer","network layer","it isn't unpacked at all","physical layer only"], a: 2,
+    w: "The router reads the IP (network layer), then routes it back down and out another card (slide 12)." },
+  { s: "Which layer adds the source and destination IP addresses?", o: ["transport","network / internet","data link","application","physical"], a: 1,
+    w: "Transport = ports, network = IPs, link = MACs. Read names, not numbers." },
+  { s: "Which address changes at every hop on the way from a laptop to a web server?", o: ["destination IP address","source port","destination port","MAC address","the URL"], a: 3,
+    w: "MAC = the Machine next door, so it is rewritten at every hop. The IP addresses stay the same start to end." }
 ];
 const L = "ABCDE";
 const qs = document.getElementById("qs");
