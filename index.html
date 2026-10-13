@@ -99,6 +99,23 @@ section { padding-block: 32px 4px; display: grid; gap: 14px; scroll-margin-top: 
 }
 .traps .label { color: var(--trap); }
 
+/* Diagrams (inline SVG, themed through the same tokens) */
+.fig { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px; display: grid; gap: 8px; }
+.fig svg { width: 100%; max-width: 520px; height: auto; display: block; margin-inline: auto; }
+.fig figcaption { font: 400 0.8rem/1.4 var(--f-mono); color: var(--muted); }
+.fig text { fill: var(--ink); font-family: var(--f-body); font-size: 13px; }
+.fig .tb { font-weight: 700; font-size: 14px; }
+.fig .tm { fill: var(--muted); font-size: 11.5px; }
+.fig .bx { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.fig .acc { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+.fig .trp { fill: var(--trap-soft); stroke: var(--trap); stroke-width: 1.5; }
+.fig .okb { fill: var(--ok-soft); stroke: var(--ok); stroke-width: 1.5; }
+.fig .bad { fill: var(--bad-soft); stroke: var(--bad); stroke-width: 1.5; }
+.fig .ln { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.fig .lt { stroke: var(--trap); stroke-width: 2; fill: none; }
+.fig .dash { stroke-dasharray: 5 4; }
+.fig .head { fill: var(--muted); }
+
 /* Tables */
 .table { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
 table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
@@ -426,6 +443,31 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
       </tbody>
     </table>
   </div>
+  <figure class="fig">
+    <svg viewBox="0 0 340 330" role="img" aria-label="Eavesdropper reads the message on the network; a side channel measures the machine">
+      <defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0L10 5L0 10z"/></marker></defs>
+      <rect class="acc" x="1" y="1" width="338" height="134" rx="8"/>
+      <text class="tb" x="12" y="24">Eavesdropper = ears on the MESSAGE</text>
+      <rect class="bx" x="12" y="40" width="80" height="36" rx="5"/><text x="52" y="63" text-anchor="middle">Laptop</text>
+      <rect class="bx" x="248" y="40" width="80" height="36" rx="5"/><text x="288" y="63" text-anchor="middle">Wi-Fi AP</text>
+      <line class="ln" x1="92" y1="58" x2="246" y2="58" marker-end="url(#ah1)"/>
+      <text class="tm" x="170" y="51" text-anchor="middle">packet: user + pw123</text>
+      <line class="ln dash" x1="170" y1="58" x2="170" y2="92"/>
+      <rect class="bad" x="112" y="92" width="116" height="30" rx="5"/><text x="170" y="112" text-anchor="middle">Attacker</text>
+      <text class="tm" x="236" y="104">copies + reads</text><text class="tm" x="236" y="118">the message</text>
+      <text class="tm" x="12" y="104">in transit</text><text class="tm" x="12" y="118">(wire, Wi-Fi)</text>
+      <rect class="trp" x="1" y="150" width="338" height="122" rx="8"/>
+      <text class="tb" x="12" y="173">Side channel = spies on the MACHINE</text>
+      <rect class="bx" x="12" y="190" width="104" height="48" rx="5"/><text x="64" y="210" text-anchor="middle">Device</text><text class="tm" x="64" y="227" text-anchor="middle">checking a PIN</text>
+      <path class="lt" d="M124 202 q8 12 0 24"/><path class="lt" d="M134 196 q12 18 0 36"/><path class="lt" d="M144 190 q16 24 0 48"/>
+      <text x="166" y="204">measures: timing,</text><text x="166" y="221">power, heat, sound, EM</text><text class="tm" x="166" y="238">then works out the key</text>
+      <text class="tm" x="12" y="261">Never reads the message itself.</text>
+      <rect class="bad" x="1" y="284" width="338" height="44" rx="8"/>
+      <text class="tb" x="170" y="302" text-anchor="middle">Timing, power, heat, sound, fan, EM, CPU</text>
+      <text class="tb" x="170" y="320" text-anchor="middle">in the question = side channel, always</text>
+    </svg>
+    <figcaption>Judge by what the attacker listened to, not what they got. A microphone on the CPU is still a side channel.</figcaption>
+  </figure>
   <div class="callout"><span class="label">The name is the answer (13 Oct)</span><p><strong>Eaves</strong>dropper → listens to the <strong>message</strong>. <strong>Middle</strong>-person → in the middle, so it can <strong>change</strong> it. <strong>Storage</strong> → stored data. <strong>Side</strong> channel → <strong>side effects</strong> of the machine. <strong>Fault</strong> injection → <strong>injects a fault</strong> (glitch, voltage, laser). Two steps: where is the data (moving / stored / being worked on), then which name.</p></div>
   <div class="callout"><span class="label">Lecturer's scam example (transcript 1:01)</span><p>Victim opens their <strong>real</strong> bank site; scammers <strong>alter the HTML in transit</strong> to show extra money, then ask for it "back". Middle-person, active, data in transit.</p></div>
 </section>
@@ -899,6 +941,14 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <span class="label">Hook: ACCESS</span>
     <p>The 5 services (slide 29): <strong>A</strong>uthentication · <strong>C</strong>onfidentiality · <strong>C</strong>ompression · <strong>E</strong>-mail compatibility · <strong>S</strong>egmentation. The run order is <strong>ACCESS with the two Cs swapped</strong>.</p>
   </div>
+  <figure class="fig">
+    <svg viewBox="0 0 340 320" role="img" aria-label="PGP order: sign, compress, encrypt, radix-64, segment">
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0L10 5L0 10z"/></marker></defs>
+      <text class="tm" x="48" y="18">Sender's message</text>
+      <circle class="acc" cx="22" cy="52" r="16"/><text class="tb" x="22" y="57" text-anchor="middle">A</text><rect class="acc" x="48" y="30" width="290" height="44" rx="6"/><text class="tb" x="60" y="49">1 Sign · Authentication</text><text class="tm" x="60" y="66">SHA digest + sender's private key</text><line class="ln" x1="193" y1="74" x2="193" y2="88" marker-end="url(#ah2)"/><circle class="trp" cx="22" cy="112" r="16"/><text class="tb" x="22" y="117" text-anchor="middle">C</text><rect class="trp" x="48" y="90" width="290" height="44" rx="6"/><text class="tb" x="60" y="109">2 Compress · Compression</text><text class="tm" x="60" y="126">ZIP removes the patterns</text><line class="ln" x1="193" y1="134" x2="193" y2="148" marker-end="url(#ah2)"/><circle class="trp" cx="22" cy="172" r="16"/><text class="tb" x="22" y="177" text-anchor="middle">C</text><rect class="trp" x="48" y="150" width="290" height="44" rx="6"/><text class="tb" x="60" y="169">3 Encrypt · Confidentiality</text><text class="tm" x="60" y="186">session key + receiver's public key</text><line class="ln" x1="193" y1="194" x2="193" y2="208" marker-end="url(#ah2)"/><circle class="acc" cx="22" cy="232" r="16"/><text class="tb" x="22" y="237" text-anchor="middle">E</text><rect class="acc" x="48" y="210" width="290" height="44" rx="6"/><text class="tb" x="60" y="229">4 Radix-64 · E-mail compat.</text><text class="tm" x="60" y="246">Encode binary to ASCII (not encrypt)</text><line class="ln" x1="193" y1="254" x2="193" y2="268" marker-end="url(#ah2)"/><circle class="acc" cx="22" cy="292" r="16"/><text class="tb" x="22" y="297" text-anchor="middle">S</text><rect class="acc" x="48" y="270" width="290" height="44" rx="6"/><text class="tb" x="60" y="289">5 Segment · Segmentation</text><text class="tm" x="60" y="306">split; sig + key in 1st segment only</text>
+    </svg>
+    <figcaption>ACCESS with the two Cs swapped (orange): Compress before Confidentiality. E = E-mail compatibility = Encode.</figcaption>
+  </figure>
   <div class="table">
     <table>
       <thead><tr><th>Step</th><th>Service</th><th>What happens</th></tr></thead>
@@ -931,6 +981,34 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <div class="panel"><span class="label">PKI = Pyramid</span><p><strong>Top-down</strong>: a hierarchy of certificate authorities (CAs) signs keys. Like a passport: one authority vouches for you.</p></div>
     <div class="panel"><span class="label">Web of trust = Web</span><p><strong>Bottom-up</strong>: "a user's public key can be signed by <strong>any other user</strong>". If A fully trusts Zaza and Zaza signs Toto's key, A may trust Toto. Friends = <strong>direct</strong> trust, friends' friends = <strong>indirect</strong>.</p></div>
   </div>
+  <figure class="fig">
+    <svg viewBox="0 0 340 210" role="img" aria-label="PKI is a top-down pyramid of CAs; the web of trust lets any user sign any user's key">
+      <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0L10 5L0 10z"/></marker></defs>
+      <text class="tb" x="82" y="16" text-anchor="middle">PKI = Pyramid</text>
+      <rect class="bad" x="44" y="28" width="76" height="26" rx="5"/><text x="82" y="46" text-anchor="middle">Root CA</text>
+      <rect class="bad" x="8" y="82" width="60" height="26" rx="5"/><text x="38" y="100" text-anchor="middle">CA 1</text>
+      <rect class="bad" x="96" y="82" width="60" height="26" rx="5"/><text x="126" y="100" text-anchor="middle">CA 2</text>
+      <rect class="bx" x="2" y="140" width="48" height="26" rx="5"/><text class="tm" x="26" y="157" text-anchor="middle">Alice</text>
+      <rect class="bx" x="56" y="140" width="48" height="26" rx="5"/><text class="tm" x="80" y="157" text-anchor="middle">Bob</text>
+      <rect class="bx" x="110" y="140" width="48" height="26" rx="5"/><text class="tm" x="134" y="157" text-anchor="middle">Toto</text>
+      <line class="ln" x1="72" y1="54" x2="42" y2="80" marker-end="url(#ah3)"/>
+      <line class="ln" x1="92" y1="54" x2="122" y2="80" marker-end="url(#ah3)"/>
+      <line class="ln" x1="32" y1="108" x2="27" y2="138" marker-end="url(#ah3)"/>
+      <line class="ln" x1="44" y1="108" x2="76" y2="138" marker-end="url(#ah3)"/>
+      <line class="ln" x1="128" y1="108" x2="133" y2="138" marker-end="url(#ah3)"/>
+      <text class="tm" x="82" y="190" text-anchor="middle">only CAs sign</text><text class="tm" x="82" y="204" text-anchor="middle">trust flows DOWN</text>
+      <line class="ln dash" x1="170" y1="8" x2="170" y2="204"/>
+      <text class="tb" x="257" y="16" text-anchor="middle">Web of trust = Web</text>
+      <rect class="okb" x="178" y="40" width="58" height="26" rx="5"/><text x="207" y="58" text-anchor="middle">A (me)</text>
+      <rect class="okb" x="278" y="40" width="58" height="26" rx="5"/><text x="307" y="58" text-anchor="middle">Zaza</text>
+      <rect class="okb" x="278" y="130" width="58" height="26" rx="5"/><text x="307" y="148" text-anchor="middle">Toto</text>
+      <line class="ln" x1="236" y1="53" x2="276" y2="53" marker-end="url(#ah3)"/><text class="tm" x="257" y="46" text-anchor="middle">trusts</text>
+      <line class="ln" x1="307" y1="66" x2="307" y2="128" marker-end="url(#ah3)"/><text class="tm" x="301" y="96" text-anchor="end">signs</text><text class="tm" x="301" y="110" text-anchor="end">Toto's key</text>
+      <line class="ln dash" x1="207" y1="66" x2="276" y2="138" marker-end="url(#ah3)"/>
+      <text class="tm" x="257" y="190" text-anchor="middle">anyone signs anyone's key</text><text class="tm" x="257" y="204" text-anchor="middle">A trusts Toto via Zaza</text>
+    </svg>
+    <figcaption>CA, root or hierarchy in an option = PKI, never web of trust.</figcaption>
+  </figure>
   <p class="source">Slide 28: the algorithm names are historical, so "focus on the workflow". Lecturer: PGP is "quite old but still very, very much in use".</p>
 </section>
 
@@ -957,6 +1035,21 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
       </tbody>
     </table>
   </div>
+  <figure class="fig">
+    <svg viewBox="0 0 340 200" role="img" aria-label="Transport mode encrypts only the payload; tunnel mode encrypts the whole original packet inside a new IP header">
+      <text class="tb" x="0" y="16">Transport mode (host to host)</text>
+      <rect class="bad" x="1" y="26" width="110" height="42" rx="4"/><text x="56" y="44" text-anchor="middle">Real IP hdr</text><text class="tm" x="56" y="60" text-anchor="middle">VISIBLE</text>
+      <rect class="bx" x="111" y="26" width="42" height="42"/><text x="132" y="52" text-anchor="middle">ESP</text>
+      <rect class="okb" x="153" y="26" width="186" height="42" rx="4"/><text x="246" y="44" text-anchor="middle">TCP + data</text><text class="tm" x="246" y="60" text-anchor="middle">encrypted (payload only)</text>
+      <text class="tm" x="0" y="86">Attacker still sees CEO-A talking to CEO-B</text>
+      <text class="tb" x="0" y="118">Tunnel mode (gateway to gateway, VPN)</text>
+      <rect class="acc" x="1" y="128" width="86" height="42" rx="4"/><text x="44" y="146" text-anchor="middle">New IP hdr</text><text class="tm" x="44" y="162" text-anchor="middle">GW A to GW B</text>
+      <rect class="bx" x="87" y="128" width="40" height="42"/><text x="107" y="154" text-anchor="middle">ESP</text>
+      <rect class="okb" x="127" y="128" width="212" height="42" rx="4"/><text x="233" y="146" text-anchor="middle">Real IP hdr + TCP + data</text><text class="tm" x="233" y="162" text-anchor="middle">ALL encrypted</text>
+      <text class="tm" x="0" y="188">Attacker sees only gateway to gateway</text>
+    </svg>
+    <figcaption>Tunnel = the whole car goes into the tunnel. Lecturer: outer box "post office A to post office B", real addresses inside the parcel.</figcaption>
+  </figure>
   <p><strong>Tunnel</strong> = the whole car goes into the tunnel, so you can't see who's inside. Lecturer: an outer box addressed "<strong>post office A → post office B</strong>", with the real sender and receiver inside the parcel.</p>
   <h3>Building blocks (slides 46–48)</h3>
   <div class="table">
@@ -994,7 +1087,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <footer>
   <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 and L02 lecture notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Updated 13 Oct (late evening): PGP (11/15) and IPsec (9/10) added, mock 17/20; traps 22–25, traps 2 and 19 sharpened. Week 2 done except TLS (deferred).</p>
+  <p>Updated 13 Oct (late evening): PGP (11/15) and IPsec (9/10) added, mock 17/20; traps 22–25, traps 2 and 19 sharpened; 4 diagrams (message vs machine, PGP order, PKI vs web of trust, transport vs tunnel). Week 2 done except TLS (deferred).</p>
 </footer>
 </div>
 
