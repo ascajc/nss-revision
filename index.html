@@ -212,6 +212,9 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <span class="pill">NCSC + stack · 13 Oct · NCSC 6/6</span>
     <span class="pill">Day in the life · 13 Oct · 9/11</span>
     <span class="pill">Layers, keys, hashing · 13 Oct · 11/12</span>
+    <span class="pill">PGP · 13 Oct · 11/15</span>
+    <span class="pill">IPsec · 13 Oct · 9/10</span>
+    <span class="pill warn">Mock · 13 Oct · 17/20</span>
   </div>
 </header>
 
@@ -234,6 +237,8 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><a href="#dns">Day in the life</a></li>
     <li><a href="#layers">Layers + keys</a></li>
     <li><a href="#hashing">Hashing</a></li>
+    <li><a href="#pgp">PGP</a></li>
+    <li><a href="#ipsec">IPsec</a></li>
     <li><a href="#quiz">Quiz</a></li>
   </ul>
 </nav>
@@ -246,7 +251,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   </div>
   <ol class="traps">
     <li><span class="label">Trap 1 · CIA wording · 7 Oct</span><p><strong>Disclosure</strong> is a loss of confidentiality, not integrity. Integrity = <strong>modification or destruction</strong>.</p></li>
-    <li><span class="label">Trap 2 · FIPS 199 names · 7 Oct</span><p>Only <strong>Low, Moderate, High</strong> are levels. "Limited" and "Serious" are adjectives inside the definitions.</p></li>
+    <li><span class="label">Trap 2 · FIPS 199 names · 7 Oct</span><p>Only <strong>Low, Moderate, High</strong> are levels. "Limited" and "Serious" are adjectives inside the definitions. <strong>L</strong>ow = <strong>L</strong>imited · Moderate = <strong>serious</strong> · <strong>H</strong>igh = <strong>severe or catastrophic</strong> (the <strong>H</strong>orrible one). Missed again in the 13 Oct mock (chose Moderate for "severe").</p></li>
     <li><span class="label">Trap 3 · Defence emphasis · 7 + 9 Oct</span><p>Passive attacks → <strong>prevent</strong>. Detect and recover is for <strong>active</strong> attacks, so the integrity service is about <strong>detection</strong>. Passive changes nothing, so there is nothing to detect.</p></li>
     <li><span class="label">Trap 4 · Publishers · missed 3× · right 2/2 on 11 Oct</span><p><strong>RFC → IETF</strong>, always. X.800 → ITU-T. FIPS 199 → NIST.</p></li>
     <li><span class="label">Trap 5 · Threat vs attack · right 2/2 on 11 Oct</span><p>"Derives from an intelligent threat" is the <strong>attack</strong> definition. A threat is only the <strong>potential</strong>.</p></li>
@@ -263,9 +268,13 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><span class="label">Trap 16 · Origin vs nonrepudiation · 11 Oct · right 2/2 on 12 Oct</span><p>"Came from" / "source" → <strong>data origin authentication</strong> (convinces the receiver). "Can't deny" / "prove it to a third party" → <strong>nonrepudiation</strong>.</p></li>
     <li><span class="label">Trap 17 · Where is the data? · 12 Oct</span><p>A message travelling <strong>between</strong> two parties → <strong>in transit</strong> (eavesdropper, middle-person). Sitting in storage (disc, backup tape, stolen drive) → <strong>at rest</strong>. A device <strong>busy computing</strong> (timing, power, sound, voltage glitch) → <strong>in use</strong> (side channel, fault injection). No message on a wire = not in transit.</p></li>
     <li><span class="label">Trap 18 · Authenticity vs accountability · 12 Oct</span><p><strong>Account</strong>-ability = keep an account: actions <strong>traced</strong> to you, logs, forensics ("who <em>did</em> it?", after). <strong>Authentic</strong>-ity = genuine, verifiable, trusted source ("is it <em>real</em>?", at the door).</p></li>
-    <li><span class="label">Trap 19 · Message vs machine · missed 4× on 13 Oct</span><p><strong>Eavesdropper</strong> hears the <strong>message</strong> on the network. <strong>Side channel</strong> hears the <strong>machine</strong>: power, timing, sound, heat or EM are <em>always</em> side channel. Café example: recording the <strong>clicks of a keyboard</strong> to get the password = side channel. "Silently captures / reads" = eavesdropper; "relays / alters" = middle-person.</p></li>
+    <li><span class="label">Trap 19 · Message vs machine · missed 4× on 13 Oct</span><p><strong>Eavesdropper</strong> hears the <strong>message</strong> on the network. <strong>Side channel</strong> hears the <strong>machine</strong>: power, timing, sound, heat or EM are <em>always</em> side channel. Café example: recording the <strong>clicks of a keyboard</strong> to get the password = side channel. "Silently captures / reads" = eavesdropper; "relays / alters" = middle-person. <strong>Exam rule:</strong> timing, power, heat, sound/noise, fan, EM or CPU behaviour in the question → <strong>side channel, always</strong>, even with a microphone and even if they get the key. Judge by <strong>what they listened to</strong>, not what they got.</p></li>
     <li><span class="label">Trap 20 · Port, IP, MAC · 13 Oct</span><p>The first letter: <strong>P</strong>ort = which <strong>P</strong>rogram (80 web, 22 SSH). <strong>I</strong>P = where on the <strong>I</strong>nternet (start to end). <strong>M</strong>AC = the <strong>M</strong>achine next door (next hop only). A <strong>router reads the IP</strong>. Read layer <em>names</em>, never the numbers.</p></li>
     <li><span class="label">Trap 21 · Which key? · 13 Oct</span><p><strong>Secret</strong> → lock with <strong>their public</strong> key (only their private opens it). <strong>Signature</strong> → sign with <strong>your private</strong> key (everyone checks it with your public). Signing with a public key proves nothing: everyone has it.</p></li>
+    <li><span class="label">Trap 22 · PGP order · missed 3× on 13 Oct</span><p><strong>ACCESS with the two Cs swapped</strong>: sign → <strong>compress → encrypt</strong> → radix-64 → segment. The <strong>E</strong> is <strong>E-mail compatibility</strong> (<strong>E</strong>ncode, radix-64), <em>not</em> encryption: encryption lives inside C (Confidentiality). Any option that encrypts before compressing is wrong (compression removes the patterns, so it must come first).</p></li>
+    <li><span class="label">Trap 23 · Web of trust vs PKI · missed 3× on 13 Oct</span><p><strong>W</strong>eb of trust = <strong>W</strong>eb: bottom-up, <strong>any user signs any user's key</strong>, no CA. <strong>P</strong>KI = <strong>P</strong>yramid: top-down CA hierarchy. "CA / root / hierarchy" in an option = PKI, never web of trust.</p></li>
+    <li><span class="label">Trap 24 · PGP segments · 13 Oct</span><p>Signature and session key appear <strong>once, typically in the first segment</strong>. They are stuck on the front, and segmentation is the <strong>last</strong> step (scissors don't copy).</p></li>
+    <li><span class="label">Trap 25 · Two sequence numbers · 13 Oct</span><p><strong>TCP</strong> sequence number = <strong>order</strong>. <strong>IPsec AH</strong> sequence number = <strong>anti-replay</strong> (S = Stop resends).</p></li>
   </ol>
 </section>
 
@@ -880,6 +889,97 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <p class="source">"Hashing is a very big topic" (l.882), but NSS only wants the top layer: one-way, detects change, not the same as encryption.</p>
 </section>
 
+<section id="pgp">
+  <div class="sec-head">
+    <span class="label">Week 2 · L02 slides 26–41 + captions</span>
+    <h2>PGP: Pretty Good Privacy</h2>
+    <p>By <strong>Phil Zimmermann</strong> (open standard: <strong>OpenPGP</strong>), for <strong>email and data storage</strong>. A <strong>hybrid</strong> cryptosystem: a random <strong>symmetric session key</strong> encrypts the content, and the <strong>receiver's public key</strong> encrypts that session key. It protects the message at the <strong>application layer</strong>, "before it is stored, forwarded, or read" (slide 28).</p>
+  </div>
+  <div class="callout">
+    <span class="label">Hook: ACCESS</span>
+    <p>The 5 services (slide 29): <strong>A</strong>uthentication · <strong>C</strong>onfidentiality · <strong>C</strong>ompression · <strong>E</strong>-mail compatibility · <strong>S</strong>egmentation. The run order is <strong>ACCESS with the two Cs swapped</strong>.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Step</th><th>Service</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr><td class="key">1 Sign</td><td>Authentication</td><td>160-bit <strong>SHA</strong> digest, encrypted with the <strong>sender's private key</strong>, <strong>prepended</strong> to the message</td></tr>
+        <tr><td class="key">2 Compress</td><td>Compression</td><td><strong>ZIP</strong>, "after appending the signature but before encryption"</td></tr>
+        <tr><td class="key">3 Encrypt</td><td>Confidentiality</td><td>One-time <strong>128-bit session key</strong> (CAST-128 default, IDEA, 3DES; CFB mode). Session key encrypted with the <strong>receiver's public key</strong> (RSA/ElGamal)</td></tr>
+        <tr><td class="key">4 Radix-64</td><td>E-mail compatibility</td><td>Binary → <strong>ASCII</strong> (radix-64 = Base64), because email is character-oriented</td></tr>
+        <tr><td class="key">5 Segment</td><td>Segmentation</td><td>Split long messages (limit can be <strong>50,000 octets</strong>); signature + session key appear <strong>once, in the first segment</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="split">
+    <div class="panel"><span class="label">Which key does what</span><p><strong>Sign</strong> = <strong>S</strong>ender's private (checked with the sender's public). <strong>Session key</strong> = locked with the <strong>R</strong>eceiver's public. <strong>Content</strong> = symmetric session key, so public keys are used only "indirectly for confidentiality".</p></div>
+    <div class="panel"><span class="label">Why compress before encrypt</span><p>Cryptanalysis hunts <strong>patterns</strong> ("good morning", lots of the letter E; that's how Enigma fell). Compression replaces repeats with symbols, removing them: an "extra layer, extra protection" (captions l.714–754).</p></div>
+  </div>
+  <h3>Key IDs and key rings (slides 37–39)</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th></th><th>Private key ring</th><th>Public key ring</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Holds</td><td><strong>My</strong> key pairs</td><td><strong>Other people's</strong> public keys (all email contacts)</td></tr>
+        <tr><td class="key">Special column</td><td><strong>Encrypted private key</strong>, locked with a <strong>hash of my passphrase</strong></td><td>Trust fields: Producer Trust, Certificate, Certificate Trust, <strong>Key Legitimacy</strong> (worked out automatically from Certificate Trust)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Key ID</strong> = the <strong>least significant 64 bits of the public key</strong> (8 bytes). It says <em>which</em> key was used, because people can have several. ⚠ Two 64s: radix-64 (encoding) and the 64-bit key ID.</p>
+  <h3>Web of trust (slides 40–41)</h3>
+  <div class="split">
+    <div class="panel"><span class="label">PKI = Pyramid</span><p><strong>Top-down</strong>: a hierarchy of certificate authorities (CAs) signs keys. Like a passport: one authority vouches for you.</p></div>
+    <div class="panel"><span class="label">Web of trust = Web</span><p><strong>Bottom-up</strong>: "a user's public key can be signed by <strong>any other user</strong>". If A fully trusts Zaza and Zaza signs Toto's key, A may trust Toto. Friends = <strong>direct</strong> trust, friends' friends = <strong>indirect</strong>.</p></div>
+  </div>
+  <p class="source">Slide 28: the algorithm names are historical, so "focus on the workflow". Lecturer: PGP is "quite old but still very, very much in use".</p>
+</section>
+
+<section id="ipsec">
+  <div class="sec-head">
+    <span class="label">Week 2 · L02 slides 42–57 + captions</span>
+    <h2>IPsec: IP security</h2>
+    <p>Security at the <strong>network layer</strong>, so it covers <strong>all applications</strong>: "we're not waiting for the application". Three areas: <strong>authentication, confidentiality, key management</strong>. Biggest use: <strong>VPNs</strong>. <strong>Built into IPv6</strong>, can be used with IPv4.</p>
+  </div>
+  <div class="callout">
+    <span class="label">Why: traffic analysis (said twice)</span>
+    <p>Encryption hides <em>what</em> is said, not <em>who talks to whom</em>. A CEO's IP talking to a rival CEO's IP is sensitive on its own, "so we need to <strong>protect the IP headers</strong>". That's what tunnel mode does.</p>
+  </div>
+  <h3>Transport vs tunnel mode (slides 53–57)</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th></th><th>Transport</th><th>Tunnel</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Between</td><td><strong>Two hosts</strong>, end to end (client to server)</td><td><strong>Security gateways</strong> (firewall/router) at one or both ends: <strong>VPN</strong></td></tr>
+        <tr><td class="key">Protects</td><td>The <strong>payload</strong> ("upper-layer protocols")</td><td>The <strong>entire IP packet</strong>, header included</td></tr>
+        <tr><td class="key">Header</td><td>Original header visible; AH/ESP inserted right after it</td><td>Whole packet inside a <strong>new outer IP header</strong> (IP-in-IP)</td></tr>
+        <tr><td class="key">Checks</td><td>The <strong>endpoints</strong> do their own</td><td>At the gateways (P and Q); hosts behind them need no IPsec</td></tr>
+        <tr><td class="key">Traffic analysis</td><td class="loss">Not stopped (addresses visible)</td><td>Hidden: traffic-flow confidentiality</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Tunnel</strong> = the whole car goes into the tunnel, so you can't see who's inside. Lecturer: an outer box addressed "<strong>post office A → post office B</strong>", with the real sender and receiver inside the parcel.</p>
+  <h3>Building blocks (slides 46–48)</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th></th><th>AH: Authentication Header</th><th>ESP: Encapsulating Security Payload</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Gives</td><td><strong>Authentication only</strong> (source + integrity). ⚠ No encryption</td><td><strong>Confidentiality (encryption)</strong>, can also authenticate</td></tr>
+        <tr><td class="key">Inside</td><td>32-bit <strong>SPI</strong> (which SA) · <strong>Sequence Number</strong> (anti-replay) · Authentication Data (a <strong>MAC</strong> = message authentication code)</td><td>Encrypted payload (transport) or whole inner packet (tunnel)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="split">
+    <div class="panel"><span class="label">Security Association (SA)</span><p>A <strong>one-way</strong> logical connection: two-way traffic needs <strong>two SAs</strong>. Identified by 3 things: the <strong>SPI</strong> (32-bit, local significance only), the <strong>IP destination address</strong> and the <strong>security protocol identifier</strong> (AH or ESP).</p></div>
+    <div class="panel"><span class="label">IKE: Internet Key Exchange</span><p>Sets up the SA and keys before AH/ESP can be used. Combines <strong>ISAKMP</strong> (framework), <strong>Oakley</strong> (Diffie-Hellman key; cookie exchange stops the DH clogging attack) and <strong>SKEME</strong> (re-keying). IKE = <strong>UDP port 500</strong>.</p></div>
+  </div>
+  <h3>"You can read" slides (49–52)</h3>
+  <div class="split">
+    <div class="panel"><span class="label">SAD vs SPD</span><p><strong>SAD</strong> (SA Database) = the details of each SA: SPI, sequence counter, anti-replay window, AH/ESP info, lifetime, mode (tunnel / transport / wildcard), path MTU. <strong>SPD</strong> (Policy Database) = the rules: which traffic gets which SA, matched by <strong>selectors</strong> (IPs, protocol, name, ports).</p></div>
+    <div class="panel"><span class="label">SPD actions</span><p><strong>P</strong>olicy → <strong>Protect, Bypass, Discard</strong>. UDP 500 = IKE → bypass. TCP 443 to the server → bypass, because <strong>TLS already encrypts it</strong> (avoid double encryption).</p></div>
+  </div>
+  <p class="source">TLS + Heartbleed (slides 58–68) were deferred to week 3; whether they're in Test 1 is unknown.</p>
+</section>
+
 <section id="quiz">
   <div class="sec-head">
     <span class="label">Tap an option to check it</span>
@@ -894,7 +994,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <footer>
   <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 and L02 lecture notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Updated 13 Oct (evening): NCSC, network stack, day in the life, security at each layer, which key does what and hashing done; traps 19–21. Next: PGP, IPsec, then the mock.</p>
+  <p>Updated 13 Oct (late evening): PGP (11/15) and IPsec (9/10) added, mock 17/20; traps 22–25, traps 2 and 19 sharpened. Week 2 done except TLS (deferred).</p>
 </footer>
 </div>
 
@@ -1107,7 +1207,51 @@ const QUESTIONS = [
   { s: "Which layer adds the source and destination IP addresses?", o: ["transport","network / internet","data link","application","physical"], a: 1,
     w: "Transport = ports, network = IPs, link = MACs. Read names, not numbers." },
   { s: "Which address changes at every hop on the way from a laptop to a web server?", o: ["destination IP address","source port","destination port","MAC address","the URL"], a: 3,
-    w: "MAC = the Machine next door, so it is rewritten at every hop. The IP addresses stay the same start to end." }
+    w: "MAC = the Machine next door, so it is rewritten at every hop. The IP addresses stay the same start to end." },
+  { s: "In PGP, which key creates the digital signature?", o: ["the receiver's public key", "the one-time session key", "the sender's private key", "the receiver's private key", "the sender's public key"], a: 2,
+    w: "A 160-bit SHA digest is encrypted with the sender's private key (slide 31)." },
+  { s: "Which is PGP's order of operations?", o: ["encrypt → sign → compress → radix-64 → segment", "sign → compress → encrypt → radix-64 → segment", "compress → sign → encrypt → radix-64 → segment", "sign → encrypt → compress → radix-64 → segment", "radix-64 → sign → compress → encrypt → segment"], a: 1, m: "13 Oct",
+    w: "ACCESS with the two Cs swapped. Sign first, segment last, compress before encrypt." },
+  { s: "In PGP, which step comes immediately after encryption?", o: ["ZIP compression", "creating the SHA digest", "segmentation", "radix-64 conversion to ASCII", "signing"], a: 3, m: "13 Oct",
+    w: "The E in ACCESS is E-mail compatibility (encode), not encryption." },
+  { s: "A long PGP email is split into 3 segments. Where do the signature and session key appear?", o: ["repeated in all three", "only in the last", "once, typically in the first segment", "in a separate fourth segment", "nowhere"], a: 2, m: "13 Oct",
+    w: "They're on the front of the message, and segmentation happens last (slide 35)." },
+  { s: "Why does PGP compress before encrypting?", o: ["so radix-64 output is shorter", "compression removes plaintext patterns that cryptanalysis exploits", "the signature can only be computed on compressed data", "the session key is too short otherwise", "so segmentation is never needed"], a: 1,
+    w: "Frequency analysis looks for patterns; compression removes them (captions l.714–754)." },
+  { s: "A PGP key ID is:", o: ["the first 128 bits of the session key", "a SHA digest of the private key", "the least significant 64 bits of the public key", "the email address hashed with the passphrase", "the most significant 64 bits of the private key"], a: 2,
+    w: "8 bytes (slide 37)." },
+  { s: "How does PGP's web of trust differ from PKI?", o: ["it is hierarchical with one root CA", "only CAs can sign keys", "a government CA vouches for each key", "it is bottom-up: any user can sign another user's public key", "it uses symmetric keys instead"], a: 3, m: "13 Oct",
+    w: "Web = bottom-up, PKI = Pyramid. CA/root/hierarchy = PKI." },
+  { s: "How are keys stored in PGP's private key ring?", o: ["in plaintext", "encrypted with the receiver's public key", "radix-64 encoded", "split into segments", "encrypted, typically using a hash of the user's passphrase"], a: 4,
+    w: "Slide 38." },
+  { s: "In PGP, the one-time session key is encrypted with:", o: ["the sender's private key", "the receiver's public key", "the receiver's private key", "the sender's public key", "a hash of the passphrase"], a: 1,
+    w: "Only the receiver's private key can then open it." },
+  { s: "Which IPsec mode encrypts the whole original packet, header included, inside a new IP packet?", o: ["transport", "wildcard", "tunnel", "AH", "bypass"], a: 2,
+    w: "IP-in-IP with a new outer header (slides 53–54)." },
+  { s: "An attacker can't read the encrypted data but sees the CEO's PC talking to a rival's finance server. Which is correct?", o: ["transport mode prevents this", "it's a replay attack", "IPsec always hides addresses", "it's traffic analysis; tunnel mode hides the real addresses", "it's a side-channel attack"], a: 3,
+    w: "Transport mode leaves the original header visible." },
+  { s: "Transport mode is typically used for:", o: ["end-to-end traffic between two hosts", "site-to-site VPNs between firewalls", "hosts behind a firewall without IPsec", "hiding the original header from routers", "gateway-to-gateway traffic"], a: 0,
+    w: "B–E all describe tunnel mode." },
+  { s: "Which IPsec component gives confidentiality through encryption?", o: ["AH", "SPI", "IKE", "ESP", "Sequence Number"], a: 3,
+    w: "AH = authentication only; ESP = encryption (+ optional auth)." },
+  { s: "The Sequence Number in the IPsec Authentication Header is there to:", o: ["identify the SA", "reorder fragmented packets", "encrypt the payload", "prevent replay attacks", "store the packet hash"], a: 3, m: "13 Oct",
+    w: "TCP sequence numbers = order; IPsec AH = anti-replay." },
+  { s: "Which is true of an IPsec Security Association?", o: ["it covers both directions", "it is identified only by the source IP", "it is set up by the AH", "it is identified by the destination MAC", "it is one-way, so two-way exchange needs two SAs"], a: 4,
+    w: "Identified by SPI + destination IP + protocol (AH or ESP)." },
+  { s: "Within IKE, which protocol is based on Diffie-Hellman and creates the encryption key?", o: ["ISAKMP", "Oakley", "SKEME", "ESP", "AH"], a: 1,
+    w: "SKEME = re-keying; ISAKMP = the framework." },
+  { s: "Which three actions can an IPsec SPD entry specify?", o: ["encrypt, decrypt, sign", "allow, deny, log", "protect, bypass, discard", "tunnel, transport, wildcard", "accept, reject, forward"], a: 2,
+    w: "Policy → Protect, Bypass, Discard. D are the SAD's modes." },
+  { s: "In the host SPD example, why is TCP 443 to the server set to BYPASS?", o: ["443 is IKE's port", "the server is outside the DMZ", "TLS already encrypts it, so IPsec would encrypt twice", "HTTPS can't run over IP", "ESP doesn't support TCP"], a: 2,
+    w: "IKE is UDP 500 (slide 52)." },
+  { s: "Packets need source authentication and integrity, but no encryption. Which IPsec component fits?", o: ["ESP", "IKE", "AH", "SPD", "Oakley"], a: 2,
+    w: "AH authenticates; it never encrypts." },
+  { s: "On a café's open Wi-Fi, an attacker captures the packets of an unencrypted login and reads the password. This is:", o: ["side-channel", "eavesdropping", "fault injection", "storage attack", "replay"], a: 1, m: "13 Oct",
+    w: "They read the message itself while it travelled." },
+  { s: "A microphone near a laptop picks up the CPU's high-pitched sounds while it decrypts, and the attacker works out the key. This is:", o: ["eavesdropping", "middle-person", "storage attack", "replay", "side-channel"], a: 4, m: "13 Oct",
+    w: "Sound from the machine = side channel, always. Judge by what they listened to, not what they got." },
+  { s: "Under FIPS 199, a severe or catastrophic adverse effect is rated:", o: ["Low", "Moderate", "Critical", "High", "Severe"], a: 3, m: "13 Oct",
+    w: "Low = limited, Moderate = serious, High = severe or catastrophic." }
 ];
 const L = "ABCDE";
 const qs = document.getElementById("qs");
