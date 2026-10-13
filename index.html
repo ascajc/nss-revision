@@ -210,6 +210,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <span class="pill">Weak spots · 11 Oct · 9/10</span>
     <span class="pill">Week 1 finish · 12 Oct · 10/14</span>
     <span class="pill">NCSC + stack · 13 Oct · NCSC 6/6</span>
+    <span class="pill">Day in the life · 13 Oct · 9/11</span>
   </div>
 </header>
 
@@ -229,7 +230,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><a href="#surface">Surface</a></li>
     <li><a href="#trees">Trees</a></li>
     <li><a href="#stack">Stack</a></li>
-    <li><a href="#dns">DNS</a></li>
+    <li><a href="#dns">Day in the life</a></li>
     <li><a href="#hashing">Hashing</a></li>
     <li><a href="#quiz">Quiz</a></li>
   </ul>
@@ -775,22 +776,35 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <section id="dns">
   <div class="sec-head">
-    <span class="label">Week 2 preview · L02 slides 14–19</span>
-    <h2>DNS: the internet's phone book</h2>
+    <span class="label">Week 2 · L02 slides 14–20</span>
+    <h2>Day in the life: DHCP → ARP → DNS → TCP → HTTP</h2>
     <p>You type <span class="mono">www.google.com</span>, but computers route by IP address. The <strong>Domain Name System</strong> turns the name into the number.</p>
   </div>
   <ol class="steps">
-    <li><p><strong>DHCP</strong> gives the laptop its IP, the first-hop router and the DNS server's address</p></li>
-    <li><p><strong>ARP</strong> finds the router's MAC address</p></li>
-    <li class="dns"><p><strong>DNS</strong>: the query goes in UDP → IP → Ethernet to the DNS server, which replies with Google's IP</p></li>
-    <li><p><strong>TCP</strong> handshake: SYN → SYNACK → ACK</p></li>
-    <li><p><strong>HTTP</strong> request for the page</p></li>
+    <li><p>"<strong>Who am I?</strong>" <strong>DHCP</strong> (Host <em>Configuration</em>) gives the laptop its own IP, the first-hop router's IP and the DNS server's IP. Broadcast to everyone, over UDP (quick)</p></li>
+    <li><p>"<strong>Who's next door?</strong>" <strong>ARP</strong> (Address <em>Resolution</em>) turns the router's IP into its <strong>MAC</strong>. Before DNS, before HTTP</p></li>
+    <li class="dns"><p>"<strong>Where's Google?</strong>" <strong>DNS</strong> (Domain <em>Name</em>) turns the name into Google's <strong>IP</strong>. The query goes in UDP → IP → Ethernet</p></li>
+    <li><p>"<strong>Can we talk?</strong>" <strong>TCP</strong> handshake: SYN → SYN-ACK → ACK</p></li>
+    <li><p>"<strong>Give me the page.</strong>" <strong>HTTP</strong> request and reply</p></li>
   </ol>
+  <h3>The 3-way handshake</h3>
+  <div class="table">
+    <table>
+      <thead><tr><th>#</th><th>Message</th><th>Means</th></tr></thead>
+      <tbody>
+        <tr><td class="key">1 · laptop →</td><td><strong>SYN</strong> (synchronise)</td><td>"Hi, can we connect?"</td></tr>
+        <tr><td class="key">2 · ← Google</td><td><strong>SYN-ACK</strong></td><td>"Got it (ACK). Hi back (SYN), can you hear me?"</td></tr>
+        <tr><td class="key">3 · laptop →</td><td><strong>ACK</strong> (acknowledge)</td><td>"Yes, got yours."</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Why three:</strong> after step 2 the laptop knows both directions work, but Google doesn't know the laptop got its reply. The ACK tells it (captions l.378–418). Only <strong>TCP</strong> (reliable) handshakes; <strong>UDP</strong> (quick) doesn't, which is why DHCP and DNS use it.</p>
   <div class="split">
     <div class="panel"><span class="label">Passive risk</span><p>Plain DNS isn't encrypted, so an eavesdropper sees every site you look up.</p></div>
     <div class="panel"><span class="label">Active risk</span><p>Spoofing or poisoning the reply sends you to a fake site.</p></div>
+    <div class="panel"><span class="label">SYN flood (background)</span><p>Thousands of SYNs, never the final ACK: the server's half-open connections fill up and real users can't connect. Active, DoS, hits <strong>availability</strong>.</p></div>
   </div>
-  <p class="source">Defences such as DNSSEC and DNS over HTTPS are background knowledge, not taught yet.</p>
+  <p class="source">Defences such as DNSSEC and DNS over HTTPS, and the SYN flood, are background knowledge, not on the slides.</p>
 </section>
 
 <section id="hashing">
@@ -845,7 +859,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <footer>
   <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 and L02 lecture notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Updated 13 Oct (17:30): NCSC done, network stack added, traps 19–20 (message vs machine; port/IP/MAC). Next: day in the life, crypto basics, hashing, PGP, IPsec, then the mock.</p>
+  <p>Updated 13 Oct (18:15): NCSC, network stack and day in the life (incl. the 3-way handshake) done; traps 19–20. Next (20:00): security at each layer + crypto basics, hashing, PGP, IPsec, then the mock.</p>
 </footer>
 </div>
 
@@ -1019,6 +1033,22 @@ const QUESTIONS = [
     w: "Silently captures = only listens to the message = eavesdropper. Middle-person relays or alters." },
   { s: "Someone measures how much power a smartcard uses while it checks a PIN, to work out the secret.", o: ["eavesdropper on data in transit","fault injection on data in use","middle-person attack on data in transit","storage security attack on data at rest","side channel attack on data in use"], a: 4, m: "13 Oct",
     w: "Power is a side effect of the machine. No message is being sent, so it can't be eavesdropping." },
+  { s: "Before the DNS query can leave the laptop, it must find out the router's MAC address. Which protocol does this?", o: ["DHCP","DNS","ARP","HTTP","TCP"], a: 2, m: "13 Oct",
+    w: "Address Resolution: IP → MAC. It comes before DNS and HTTP (slide 17)." },
+  { s: "Why is the third step (ACK) of the TCP handshake needed?", o: ["to send the web page","so the server knows the client received its SYN-ACK","to get the server's IP address","to encrypt the connection","to find the router's MAC address"], a: 1,
+    w: "After step 2 the client knows both directions work; the server doesn't know its reply arrived (captions l.378–418)." },
+  { s: "An attacker times exactly how long a server takes to reject each wrong password, and uses the tiny differences to guess the right one.", o: ["eavesdropper on data in transit","middle-person attack on data in transit","storage security attack on data at rest","side channel attack on data in use","fault injection on data in use"], a: 3,
+    w: "Timing is a side effect of the machine while it checks (in use). It never reads the stored data, so not at rest." },
+  { s: "The laptop knows the name google.com but not Google's IP address. Which protocol finds it?", o: ["ARP","DHCP","DNS","TCP","HTTP"], a: 2, m: "13 Oct",
+    w: "Domain Name System: name → IP. HTTP is the last step, fetching the page." },
+  { s: "Right after joining the Wi-Fi, which protocol gives the laptop its own IP address?", o: ["DNS","TCP","ARP","DHCP","HTTP"], a: 3,
+    w: "Host Configuration: your IP, the router's IP and the DNS server's IP (slides 15–16)." },
+  { s: "What is the correct order when a new laptop opens a web page?", o: ["DNS, DHCP, ARP, TCP, HTTP","DHCP, ARP, DNS, TCP, HTTP","ARP, DHCP, DNS, HTTP, TCP","DHCP, DNS, ARP, HTTP, TCP","TCP, DHCP, ARP, DNS, HTTP"], a: 1,
+    w: "Who am I → who's next door → where's Google → can we talk → give me the page." },
+  { s: "In the TCP handshake, which message does the client send first?", o: ["ACK","SYN-ACK","SYN","FIN","HTTP GET"], a: 2,
+    w: "SYN = synchronise, \"can we connect?\"" },
+  { s: "An attacker sends thousands of TCP SYNs and never sends the final ACK, so real users can't connect. Which CIA principle is hit?", o: ["confidentiality","integrity","availability","nonrepudiation","authenticity"], a: 2,
+    w: "A SYN flood is denial of service (background knowledge, not on the slides)." },
   { s: "Which header holds the source and destination port numbers?", o: ["MAC header","IP header","TCP/UDP header","Ethernet trailer","the application data"], a: 2,
     w: "Port = which Program. Added by the transport layer." },
   { s: "A router receives a packet that isn't addressed to itself. How far up the stack does it go before being forwarded?", o: ["application layer","transport layer","network layer","it isn't unpacked at all","physical layer only"], a: 2,
