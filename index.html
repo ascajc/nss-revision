@@ -211,6 +211,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <span class="pill">Week 1 finish · 12 Oct · 10/14</span>
     <span class="pill">NCSC + stack · 13 Oct · NCSC 6/6</span>
     <span class="pill">Day in the life · 13 Oct · 9/11</span>
+    <span class="pill">Layers, keys, hashing · 13 Oct · 11/12</span>
   </div>
 </header>
 
@@ -231,6 +232,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><a href="#trees">Trees</a></li>
     <li><a href="#stack">Stack</a></li>
     <li><a href="#dns">Day in the life</a></li>
+    <li><a href="#layers">Layers + keys</a></li>
     <li><a href="#hashing">Hashing</a></li>
     <li><a href="#quiz">Quiz</a></li>
   </ul>
@@ -263,6 +265,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
     <li><span class="label">Trap 18 · Authenticity vs accountability · 12 Oct</span><p><strong>Account</strong>-ability = keep an account: actions <strong>traced</strong> to you, logs, forensics ("who <em>did</em> it?", after). <strong>Authentic</strong>-ity = genuine, verifiable, trusted source ("is it <em>real</em>?", at the door).</p></li>
     <li><span class="label">Trap 19 · Message vs machine · missed 4× on 13 Oct</span><p><strong>Eavesdropper</strong> hears the <strong>message</strong> on the network. <strong>Side channel</strong> hears the <strong>machine</strong>: power, timing, sound, heat or EM are <em>always</em> side channel. Café example: recording the <strong>clicks of a keyboard</strong> to get the password = side channel. "Silently captures / reads" = eavesdropper; "relays / alters" = middle-person.</p></li>
     <li><span class="label">Trap 20 · Port, IP, MAC · 13 Oct</span><p>The first letter: <strong>P</strong>ort = which <strong>P</strong>rogram (80 web, 22 SSH). <strong>I</strong>P = where on the <strong>I</strong>nternet (start to end). <strong>M</strong>AC = the <strong>M</strong>achine next door (next hop only). A <strong>router reads the IP</strong>. Read layer <em>names</em>, never the numbers.</p></li>
+    <li><span class="label">Trap 21 · Which key? · 13 Oct</span><p><strong>Secret</strong> → lock with <strong>their public</strong> key (only their private opens it). <strong>Signature</strong> → sign with <strong>your private</strong> key (everyone checks it with your public). Signing with a public key proves nothing: everyone has it.</p></li>
   </ol>
 </section>
 
@@ -807,6 +810,38 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
   <p class="source">Defences such as DNSSEC and DNS over HTTPS, and the SYN flood, are background knowledge, not on the slides.</p>
 </section>
 
+<section id="layers">
+  <div class="sec-head">
+    <span class="label">Week 2 · L02 slides 21–25</span>
+    <h2>Security at each layer + which key does what</h2>
+    <p>"They are <strong>definitely the most important protocols</strong>." The names give the layer away.</p>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>Layer</th><th>Protocol</th><th>Protects</th><th>Slide 22</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Application</td><td><strong>PGP</strong>, S/MIME</td><td>the <strong>message itself</strong> (email), even while stored on servers</td><td>embedded in the application itself</td></tr>
+        <tr><td class="key">Transport</td><td><strong>SSL/TLS</strong> (Transport Layer Security)</td><td>the <strong>connection</strong> (HTTPS padlock)</td><td><strong>application-agnostic</strong></td></tr>
+        <tr><td class="key">Network</td><td><strong>IPsec</strong> (IP security)</td><td><strong>every IP packet</strong>, any app; VPNs</td><td>covers all applications · <strong>customisation for specific apps is difficult</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="split">
+    <div class="panel"><span class="label">Symmetric</span><p>Same secret key locks and unlocks → <strong>confidentiality</strong>, fast. Problem: <strong>key distribution</strong> ("that's why we rely more on asymmetric").</p></div>
+    <div class="panel"><span class="label">Asymmetric (public-key)</span><p>A linked pair: public (anyone) + private (owner only). Gives <strong>authentication and integrity</strong> with signed hashes (slide 23).</p></div>
+  </div>
+  <div class="table">
+    <table>
+      <thead><tr><th>You want to…</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td class="key">send a secret</td><td class="loss"><strong>their public</strong> key</td></tr>
+        <tr><td class="key">sign as yourself</td><td class="loss"><strong>your private</strong> key (checked with your public)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="source">Hybrid (added explanation): asymmetric sends the symmetric key, the symmetric key encrypts the data. PGP, TLS and Lab 02 (RSA + AES).</p>
+</section>
+
 <section id="hashing">
   <div class="sec-head">
     <span class="label">Week 2 · L02 slides 23, 31, 46 + captions</span>
@@ -859,7 +894,7 @@ footer { padding-block: 36px 0; color: var(--muted); font-size: 0.85rem; display
 
 <footer>
   <p>Personal revision notes for NSS at Goldsmiths, built from my own study wiki (L01 and L02 lecture notes and my question bank). Quotes are from the module's lecture materials.</p>
-  <p>Updated 13 Oct (18:15): NCSC, network stack and day in the life (incl. the 3-way handshake) done; traps 19–20. Next (20:00): security at each layer + crypto basics, hashing, PGP, IPsec, then the mock.</p>
+  <p>Updated 13 Oct (evening): NCSC, network stack, day in the life, security at each layer, which key does what and hashing done; traps 19–21. Next: PGP, IPsec, then the mock.</p>
 </footer>
 </div>
 
@@ -1049,6 +1084,22 @@ const QUESTIONS = [
     w: "SYN = synchronise, \"can we connect?\"" },
   { s: "An attacker sends thousands of TCP SYNs and never sends the final ACK, so real users can't connect. Which CIA principle is hit?", o: ["confidentiality","integrity","availability","nonrepudiation","authenticity"], a: 2,
     w: "A SYN flood is denial of service (background knowledge, not on the slides)." },
+  { s: "Which protocol works at the network layer and protects all IP traffic for every application?", o: ["PGP","S/MIME","TLS","IPsec","HTTP"], a: 3,
+    w: "IP-sec secures the IP (network) layer. PGP = application, TLS = transport (slide 22)." },
+  { s: "Alice wants to send Bob a secret message using public-key cryptography. Which key does she encrypt it with?", o: ["Alice's private key","Alice's public key","Bob's public key","Bob's private key","a shared secret key"], a: 2,
+    w: "Lock with their public: only Bob's private key opens it." },
+  { s: "What is the main problem with symmetric cryptography that made the lecturer say \"we rely more on asymmetric\"?", o: ["it is too slow","it can't give confidentiality","getting the shared key safely to the other side","the keys are too long","it only works at the network layer"], a: 2,
+    w: "Key distribution: the military flew the key over in a locked box." },
+  { s: "Alice signs a document so anyone can check it came from her. Which key does she sign with?", o: ["Bob's public key","Alice's private key","Alice's public key","Bob's private key","a shared secret key"], a: 1, m: "13 Oct",
+    w: "Sign with your private: only Alice has it. Signing with her public key proves nothing, because everyone has it." },
+  { s: "According to slide 22, what is a downside of IPsec?", o: ["it only protects email","customising it for specific applications is difficult","every app developer must build it in","it only works over UDP","it can't encrypt data"], a: 1,
+    w: "Upside: covers all applications. Downside: hard to customise per app." },
+  { s: "Bob receives a contract signed by Alice. Which key does Bob use to check the signature is really Alice's?", o: ["Bob's private key","Bob's public key","Alice's public key","Alice's private key","a shared session key"], a: 2,
+    w: "Signed with Alice's private, checked with Alice's public." },
+  { s: "Bob receives a file and its hash. He hashes the file himself and gets a different value. What does this tell him?", o: ["the file is confidential","the file was changed (integrity is lost)","the sender's private key was stolen","the file was encrypted","nothing"], a: 1,
+    w: "Different hash = something changed (captions l.872–876)." },
+  { s: "In IPsec's Authentication Header, the \"MAC\" in the authentication data means:", o: ["MAC address","message authentication code (a hash made with a secret key)","the media access control layer","mandatory access control","machine address code"], a: 1,
+    w: "Not a MAC address. Hash + secret key = MAC (slide 46)." },
   { s: "Which header holds the source and destination port numbers?", o: ["MAC header","IP header","TCP/UDP header","Ethernet trailer","the application data"], a: 2,
     w: "Port = which Program. Added by the transport layer." },
   { s: "A router receives a packet that isn't addressed to itself. How far up the stack does it go before being forwarded?", o: ["application layer","transport layer","network layer","it isn't unpacked at all","physical layer only"], a: 2,
