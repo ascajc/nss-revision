@@ -1,5 +1,5 @@
 // Offline copy for the phone: pages come from the network first (so a rebuild shows up), the cache when offline.
-const VERSION = "2026-10-28T13:05";
+const VERSION = "2026-10-31T18:59";
 const CACHE = "uni-" + VERSION;
 const FILES = [
   "./", "index.html", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png", "apple-touch-icon.png",
